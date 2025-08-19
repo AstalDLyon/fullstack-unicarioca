@@ -92,29 +92,77 @@ nav a:hover {
 }
 
 .planos h2 {
-    font-size: 28px;
+    font-size: 32px;
     margin-bottom: 40px;
+}
+
+.planos-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
 }
 
 .plano-card {
     background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 400px;
-    border-radius: 8px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 30px;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.plano-card:hover {
+    transform: scale(1.03);
+}
+
+.plano-card.destaque {
+    border-color: #ffcc00;
+    background-color: #fffbe6;
 }
 
 .plano-card h3 {
-    font-size: 22px;
+    font-size: 24px;
     margin-bottom: 10px;
 }
 
-.plano-card span {
-    display: block;
-    margin-top: 10px;
+.promo {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.plano-card ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.plano-card ul li {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.preco {
+    font-size: 20px;
     font-weight: bold;
     color: #000;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.btn-plano {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.btn-plano:hover {
+    background-color: #333;
 }
 
 
