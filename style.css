@@ -1,0 +1,238 @@
+/* Reset básico */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+
+/* Cabeçalho */
+
+header {
+    background-color: #000;
+    color: #fff;
+    padding: 20px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+nav h1 {
+    font-size: 24px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #ffcc00;
+}
+
+
+/* Seção Hero */
+
+.hero {
+    background: linear-gradient(to right, #000, #333);
+    color: #fff;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.btn {
+    background-color: #ffcc00;
+    color: #000;
+    padding: 12px 24px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #e6b800;
+}
+
+
+/* Seção Planos */
+
+.planos {
+    background-color: #fff;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.planos h2 {
+    font-size: 28px;
+    margin-bottom: 40px;
+}
+
+.plano-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 400px;
+    border-radius: 8px;
+}
+
+.plano-card h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.plano-card span {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #000;
+}
+
+
+/* Seção Unidades */
+
+.unidades {
+    background-color: #eee;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.unidades input {
+    padding: 10px;
+    width: 250px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.unidades button {
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.unidades button:hover {
+    background-color: #333;
+}
+
+
+/* Seção Aulas */
+
+.aulas {
+    background-color: #fff;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.aulas h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.aulas ul {
+    list-style: none;
+    padding: 0;
+}
+
+.aulas li {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+
+/* Rodapé */
+
+footer {
+    background-color: #000;
+    color: #fff;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+footer h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.whatsapp-btn {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #25D366;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.whatsapp-btn:hover {
+    background-color: #1ebe5d;
+}
+
+.parallax-header {
+    background-image: url('https://www.shutterstock.com/shutterstock/videos/3700970431/thumb/7.jpg?ip=x480');
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 300px;
+    color: rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 45px;
+    flex-wrap: wrap;
+}
+
+.parallax-header nav h1 {
+    font-size: 32px;
+}
+
+.parallax-header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.parallax-header nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.parallax-header nav a:hover {
+    color: #ffcc00;
+}
