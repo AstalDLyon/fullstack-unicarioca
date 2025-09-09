@@ -88,7 +88,6 @@ nav a:hover {
 
 .planos {
   background-color: #fff;
-  padding: 60px 20px;
   text-align: center;
 }
 
@@ -112,6 +111,7 @@ nav a:hover {
   width: 300px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease;
+  margin-bottom: 24px;
 }
 
 .plano-card:hover {
@@ -195,6 +195,20 @@ nav a:hover {
   background-color: #d92f44;
 }
 
+@media (max-width: 390px) {
+  .unidades input {
+    display: block;
+    margin: 0 auto 12px auto;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .unidades button {
+    display: block;
+    margin: 0 auto;
+  }
+}
+
 /* Seção Aulas */
 
 .aulas {
@@ -248,38 +262,66 @@ footer h2 {
   background-color: #bababa;
 }
 
+/* Estilo padrão (desktop) */
 .parallax-header {
   background-color: #a01f22;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 120px;
-  /* color: rgb(0, 0, 0); */
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  padding: 0 20px;
 }
 
-.parallax-header nav h1 {
-  font-size: 32px;
+.parallax-logo .logo {
+  height: 120px;
 }
 
-.parallax-header nav ul {
+.parallax-links nav ul {
   list-style: none;
   display: flex;
   gap: 50px;
-  padding-right: 30px;
-  padding-bottom: 100px;
+  padding: 0;
+  margin: 0;
 }
 
-.parallax-header nav a {
+.parallax-links nav a {
   color: white;
   text-decoration: none;
   font-weight: bold;
 }
 
-.parallax-header nav a:hover {
+.parallax-links nav a:hover {
   color: #bababa;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 720px) {
+  .parallax-header {
+    flex-direction: column;
+    justify-content: center;
+    height: auto;
+    padding: 20px 10px;
+  }
+
+  .parallax-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .parallax-logo .logo {
+    height: 160px;
+  }
+
+  .parallax-links nav ul {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    padding: 0;
+  }
 }
