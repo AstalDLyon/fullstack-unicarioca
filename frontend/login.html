@@ -48,7 +48,7 @@
     .logo{
       display: block;
       margin: 0 auto 20px;
-      width: 280px;
+      width: 160px;
       max-width: 80%;
       height: auto;
     }
@@ -79,12 +79,29 @@
       box-shadow: var(--focus);
     }
 
-    .actions{
+    .actions {
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 12px;
-      margin-top: 10px;
+      margin-top: 14px;
     }
+
+    .action-link .link {
+      color: var(--muted);
+      font-size: .95rem;
+      text-decoration: none;
+    }
+
+    .action-link .link:hover {
+      text-decoration: underline;
+    }
+
+    .action-btn .btn {
+      min-width: 140px;
+      text-align: center;
+    }
+
     .btn{
       border: 0;
       border-radius: 10px;
@@ -141,7 +158,7 @@
 <body>
   <main class="card" role="main" aria-label="Área de login">
     <!-- Substitua o src abaixo por 'logo.png' (ou outro arquivo). -->
-    <img class="logo" id="logo" src="C:\Users\Adriel\Desktop\fullstack-unicarioca-main (1)\fullstack-unicarioca-main\frontend\img\logo.webp" alt="UniGym Fitness" />
+    <img class="logo" id="logo" src="img/logo.webp" alt="UniGym Fitness" />
 
     <form>
       <div class="field">
@@ -155,8 +172,12 @@
       </div>
 
       <div class="actions">
-        <button class="btn" type="submit">Acessar</button>
-        <a class="link" href="#" aria-label="Perdeu a senha?">Perdeu a senha?</a>
+        <div class="action-link">
+          <a class="link" href="#" aria-label="Perdeu a senha?">Perdeu a senha?</a>
+        </div>
+        <div class="action-btn">
+          <button class="btn" type="submit">Acessar</button>
+        </div>
       </div>
 
     <footer>
