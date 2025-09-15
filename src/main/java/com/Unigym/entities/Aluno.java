@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 
 @Entity
 @Table(name = "Alunos")
@@ -16,6 +17,11 @@ public class Aluno {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // definindo id como chave primaria
     private Long id;
     private String nome;
+    
+    @Column(unique = true)
+    private String email;
+    
+    private String senha;
 
     @ManyToOne
     @JoinColumn(name = "instrutor_id") // relacionando aluno com instrutor
@@ -37,6 +43,30 @@ public class Aluno {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+    
+    public Instrutor getInstrutor() {
+        return instrutor;
+    }
+
+    public void setInstrutor(Instrutor instrutor) {
+        this.instrutor = instrutor;
     }
 
 }
