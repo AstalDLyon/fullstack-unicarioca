@@ -7,7 +7,7 @@
  
 - **img** – Com a logo usada
 - **Login HTML/Login-ScriptJS** – A pagina de login e as funções para consumir a API
-- **Index HTML/Style CSS / ScriptJS ** –  São as relacionadas a pagina principal e suas funções
+- **Index HTML/Style CSS / ScriptJS** –  São as relacionadas a pagina principal e suas funções
   
 ### Pasta src(backend)
 
