@@ -28,7 +28,7 @@
 - [ ] Criação de set de exercicios para cada aluno.
 
 ---
-# 🧪 Tutorial de Teste dos Servidores Secundários
+# 🧪 Tutorial de Teste
 
 Será definido depois.
 
