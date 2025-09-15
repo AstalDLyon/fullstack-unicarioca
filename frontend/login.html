@@ -160,15 +160,17 @@
     <!-- Substitua o src abaixo por 'logo.png' (ou outro arquivo). -->
     <img class="logo" id="logo" src="img/logo.webp" alt="UniGym Fitness" />
 
-    <form>
+    <div id="mensagem" style="text-align: center; margin: 10px 0; display: none;"></div>
+
+    <form id="loginForm">
       <div class="field">
-        <label class="label" for="usuario">Identificação de usuário</label>
-        <input class="input" type="text" id="usuario" name="usuario" autocomplete="username" />
+        <label class="label" for="email">Email</label>
+        <input class="input" type="email" id="email" name="email" autocomplete="email" required />
       </div>
 
       <div class="field">
         <label class="label" for="senha">Senha</label>
-        <input class="input" type="password" id="senha" name="senha" autocomplete="current-password" />
+        <input class="input" type="password" id="senha" name="senha" autocomplete="current-password" required />
       </div>
 
       <div class="actions">
@@ -185,9 +187,62 @@
     </footer>
   </main>
 
-  <!-- Exemplo: também é possível trocar a logo ou o fundo via JS, se preferir.
-       document.getElementById('logo').src = 'minha-logo.svg';
-       document.documentElement.style.setProperty('--bg-image', "url('meu-fundo.jpg')");
-  -->
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      
+      // Dados a serem enviados para o back-end
+      const dados = {
+        email: email,
+        senha: senha
+      };
+      
+      // URL do endpoint de autenticação
+      const url = 'http://localhost:8080/api/auth/login';
+      
+      // Configuração da requisição
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dados)
+      })
+      .then(response => response.json())
+      .then(data => {
+        const mensagemElement = document.getElementById('mensagem');
+        mensagemElement.style.display = 'block';
+        
+        if (data.success) {
+          // Login bem-sucedido
+          mensagemElement.textContent = 'Login realizado com sucesso! Redirecionando...';
+          mensagemElement.style.color = 'green';
+          
+          // Armazenar informações do usuário no localStorage
+          localStorage.setItem('usuarioId', data.id);
+          localStorage.setItem('usuarioNome', data.nome);
+          
+          // Redirecionar para a página principal após um breve delay
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+        } else {
+          // Login falhou
+          mensagemElement.textContent = data.message || 'Falha na autenticação. Verifique suas credenciais.';
+          mensagemElement.style.color = 'red';
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao processar login:', error);
+        const mensagemElement = document.getElementById('mensagem');
+        mensagemElement.style.display = 'block';
+        mensagemElement.textContent = 'Erro ao conectar com o servidor. Tente novamente mais tarde.';
+        mensagemElement.style.color = 'red';
+      });
+    });
+  </script>
 </body>
 </html>
