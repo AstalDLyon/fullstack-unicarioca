@@ -1,0 +1,94 @@
+/**
+ * nav-utils.css
+ *
+ * Este arquivo contém estilos de utilidade para a navegação do sistema UniGym.
+ * Ele define componentes comuns reutilizados em múltiplas páginas, principalmente
+ * relacionados à barra de navegação, autenticação e elementos de usuário.
+ *
+ * Seções principais:
+ * - Botão de login/logout
+ * - Informações do usuário no cabeçalho
+ * - Menu dropdown de usuário
+ * - Estados de hover e interação
+ * - Responsividade da navegação
+ *
+ * Este arquivo é importado por múltiplas páginas para manter uma aparência
+ * consistente dos elementos de navegação em todo o sistema.
+ */
+
+.login-btn {
+    background-color: #ffffff;
+    color: #a01f22 !important;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #f0f0f0;
+    text-decoration: none;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.user-info span {
+    color: white;
+    font-weight: normal;
+}
+
+#logout-btn {
+    background-color: transparent;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+#logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-menu {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.user-menu-item {
+    color: white;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s;
+}
+
+.user-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+}
+
+.medidas-btn {
+    display: inline-block;
+    background-color: #a01f22;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.medidas-btn:hover {
+    background-color: #801a1c;
+}

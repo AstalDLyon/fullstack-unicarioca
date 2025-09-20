@@ -1,159 +1,36 @@
 <!doctype html>
+<!--
+  login.html
+
+  Esta página é responsável pela autenticação de usuários no sistema UniGym.
+  Ela fornece um formulário de login onde alunos e instrutores podem inserir
+  suas credenciais para acessar as funcionalidades específicas de suas contas.
+  
+  Conteúdo principal:
+  - Formulário de login com campos para email/matrícula e senha
+  - Validação de campos e feedback visual de erros
+  - Opção para lembrar credenciais
+  - Interface visual com identidade da UniGym
+  
+  Comportamento:
+  - Validação de campos em tempo real
+  - Submissão de credenciais via API
+  - Armazenamento de token de autenticação em localStorage/sessionStorage
+  - Redirecionamento para página apropriada após login bem-sucedido
+  - Exibição de mensagens de erro em caso de falha na autenticação
+  
+  Arquivos relacionados:
+  - login-style.css: Estilos específicos da página de login
+  - login-script.js: Lógica de autenticação e interação com API
+  - auth-script.js: Funções auxiliares para gerenciamento de autenticação
+-->
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>UniGym - Acesso</title>
-  <style>
-    /* ===== CONFIGURAÇÕES RÁPIDAS =====
-       Altere os arquivos abaixo para mudar o fundo e a logo. */
-    :root{
-      --background: linear-gradient(180deg, #a01f22, #ffffff);   /* imagem de fundo (mãos/celular) */
-      --card-width: 560px;
-      --accent: #b71c1c;             /* tom vermelho do botão */
-      --accent-hover: #9a1717;
-      --border: #e6e6e6;
-      --text: #222;
-      --muted: #6b7280;
-      --radius: 14px;
-      --shadow: 0 10px 30px rgba(0,0,0,.08);
-      --focus: 0 0 0 3px rgba(183,28,28,.25);
-      --bg-blur: 10px;
-    }
-
-    /* ===== LAYOUT DE FUNDO ===== */
-    html, body { height: 100%; }
-    body{
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-      color: var(--text);
-      background:
-        linear-gradient(to bottom, #a01f22, #ffffff),
-        var(--bg-image) center/cover no-repeat fixed;
-      display: grid;
-      place-items: center;
-    }
-
-    /* ===== CARTÃO ===== */
-    .card{
-      width: min(92vw, var(--card-width));
-      background: rgba(255,255,255,.85);
-      backdrop-filter: blur(var(--bg-blur));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 28px 28px 22px;
-    }
-
-    .logo{
-      display: block;
-      margin: 0 auto 20px;
-      width: 160px;
-      max-width: 80%;
-      height: auto;
-    }
-
-    .field{
-      display: grid;
-      gap: 8px;
-      margin: 14px 0;
-    }
-    .label{
-      font-size: 0.92rem;
-      color: var(--muted);
-    }
-    .input{
-      appearance: none;
-      width: 100%;
-      height: 44px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0 0px;
-      font-size: 1rem;
-      transition: box-shadow .2s, border-color .2s, background-color .2s;
-      background: #fff;
-    }
-    .input:focus{
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: var(--focus);
-    }
-
-    .actions {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .action-link .link {
-      color: var(--muted);
-      font-size: .95rem;
-      text-decoration: none;
-    }
-
-    .action-link .link:hover {
-      text-decoration: underline;
-    }
-
-    .action-btn .btn {
-      min-width: 140px;
-      text-align: center;
-    }
-
-    .btn{
-      border: 0;
-      border-radius: 10px;
-      padding: 10px 18px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: var(--accent);
-      color: #fff;
-      transition: background .2s, transform .02s;
-    }
-    .btn:active{ transform: translateY(1px); }
-    .btn:hover{ background: var(--accent-hover); }
-
-    .link{
-      color: var(--muted);
-      text-decoration: none;
-      font-size: .95rem;
-    }
-    .link:hover{ text-decoration: underline; }
-
-    .row{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    .select{
-      min-width: 230px;
-      height: 40px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0 10px;
-      background: #fff;
-      font-size: .95rem;
-    }
-    .note{
-      color: var(--muted);
-      font-size: .9rem;
-      margin-top: 8px;
-    }
-
-    footer{
-      margin-top: 26px;
-      text-align: center;
-      color: var(--muted);
-      font-size: .85rem;
-    }
-  </style>
+  <link rel="stylesheet" href="login-style.css">
+  <link rel="stylesheet" href="nav-utils.css">
 </head>
 <body>
   <main class="card" role="main" aria-label="Área de login">
@@ -187,62 +64,6 @@
     </footer>
   </main>
 
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const email = document.getElementById('email').value;
-      const senha = document.getElementById('senha').value;
-      
-      // Dados a serem enviados para o back-end
-      const dados = {
-        email: email,
-        senha: senha
-      };
-      
-      // URL do endpoint de autenticação
-      const url = 'http://localhost:8080/api/auth/login';
-      
-      // Configuração da requisição
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dados)
-      })
-      .then(response => response.json())
-      .then(data => {
-        const mensagemElement = document.getElementById('mensagem');
-        mensagemElement.style.display = 'block';
-        
-        if (data.success) {
-          // Login bem-sucedido
-          mensagemElement.textContent = 'Login realizado com sucesso! Redirecionando...';
-          mensagemElement.style.color = 'green';
-          
-          // Armazenar informações do usuário no localStorage
-          localStorage.setItem('usuarioId', data.id);
-          localStorage.setItem('usuarioNome', data.nome);
-          
-          // Redirecionar para a página principal após um breve delay
-          setTimeout(() => {
-            window.location.href = 'index.html';
-          }, 1500);
-        } else {
-          // Login falhou
-          mensagemElement.textContent = data.message || 'Falha na autenticação. Verifique suas credenciais.';
-          mensagemElement.style.color = 'red';
-        }
-      })
-      .catch(error => {
-        console.error('Erro ao processar login:', error);
-        const mensagemElement = document.getElementById('mensagem');
-        mensagemElement.style.display = 'block';
-        mensagemElement.textContent = 'Erro ao conectar com o servidor. Tente novamente mais tarde.';
-        mensagemElement.style.color = 'red';
-      });
-    });
-  </script>
+  <script src="auth-script.js"></script>
 </body>
 </html>

@@ -1,11 +1,39 @@
 <!DOCTYPE html>
+<!--
+  index.html
+
+  Esta é a página inicial (landing page) do sistema UniGym. Ela serve como
+  ponto de entrada para a aplicação e apresenta informações gerais sobre
+  a academia, seus serviços e diferenciais.
+  
+  Conteúdo principal:
+  - Cabeçalho com navegação responsiva
+  - Banner principal com chamada para ação
+  - Seções informativas sobre serviços oferecidos
+  - Seção de depoimentos/testemunhos
+  - Seção de instrutores/equipe
+  - Informações de contato
+  - Rodapé com links e informações legais
+  
+  Comportamento:
+  - Exibe botão de login para usuários não autenticados
+  - Exibe menu personalizado para usuários autenticados (nome, acesso a treinos, medidas, etc.)
+  - Links de navegação interna com rolagem suave
+  - Botões de contato e chamada para ação
+  
+  Arquivos relacionados:
+  - index-style.css: Estilos específicos da página
+  - nav-utils.css: Estilos para navegação
+  - index-script.js: Comportamento e interatividade
+-->
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PowerMove Fitness</title>
-    <link rel="stylesheet" href="style.css">
+    <title>UniGym</title>
+    <link rel="stylesheet" href="index-style.css">
+    <link rel="stylesheet" href="nav-utils.css">
 </head>
 
 <body>
@@ -21,6 +49,7 @@
                 <li><a href="#unidades">Unidades</a></li>
                 <li><a href="#aulas">Aulas</a></li>
                 <li><a href="#contato">Contato</a></li>
+                <li><a href="login.html" class="login-btn">Área do Aluno</a></li>
             </ul>
             </nav>
         </div>
@@ -77,8 +106,20 @@
 
         <section id="unidades" class="unidades">
             <h2>Encontre uma unidade</h2>
-            <input type="text" placeholder="Digite sua cidade ou CEP">
-            <button>Buscar</button>
+            <div class="localizacoes">
+                <div class="unidade">
+                    <h3>Meier</h3>
+                    <p>Rua ficcional, 2</p>
+                    <p>Segunda a Sexta: 6h às 22h</p>
+                    <p>Sábados e Domingos: 8h às 18h</p>
+                </div>
+                <div class="unidade">
+                    <h3>Rio Comprido</h3>
+                    <p>Rua ficcional, 1</p>
+                    <p>Segunda a Sexta: 6h às 23h</p>
+                    <p>Sábados e Domingos: 9h às 20h</p>
+                </div>
+            </div>
         </section>
 
         <section id="aulas" class="aulas">
@@ -92,14 +133,16 @@
         </section>
         <footer id="contato">
             <h2>Fale conosco</h2>
-            <p>Email: contato@powermove.com.br</p>
-            <p>Telefone: (21) 97551-3181</p>
+            <p>Email: contato@unigym.com.br</p>
+            <p>Telefone: (21) 99999-9999</p>
             <!--o número está funcional e redirecionando para um desconhecido.-->
 
             <a href="https://wa.me/5521975513181" target="_blank" class="whatsapp-btn">
         📱 Fale conosco pelo WhatsApp
     </a>
         </footer>
+    
+    <script src="index-script.js"></script>
 </body>
 
 </html>

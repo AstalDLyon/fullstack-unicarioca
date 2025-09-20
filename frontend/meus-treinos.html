@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+  meus-treinos.html
+
+  Esta página exibe os planos de treinamento atribuídos ao aluno pelo instrutor.
+  Permite que os alunos visualizem seus treinos atuais, histórico de treinos
+  anteriores, e detalhes específicos de cada exercício recomendado.
+  
+  Conteúdo principal:
+  - Lista de treinos atuais organizados por categoria (A, B, C) ou objetivo
+  - Detalhes de cada treino incluindo exercícios, séries, repetições, carga
+  - Instruções especiais ou observações do instrutor
+  - Histórico de treinos anteriores (se implementado)
+  
+  Comportamento:
+  - Carregamento de dados de treinos via API
+  - Exibição organizada dos treinos por tipo/categoria
+  - Detalhamento de exercícios ao clicar/expandir
+  - Marcação de treinos como concluídos (se implementado)
+  - Filtros por data ou tipo de treino
+  
+  Arquivos relacionados:
+  - treinos-style.css: Estilos específicos para visualização de treinos
+  - treinos-script.js: Lógica de carregamento e exibição de dados de treinos
+  - auth-script.js: Verificação de autenticação e permissões
+-->
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Treinos - UniGym</title>
+    <link rel="stylesheet" href="index-style.css">
+    <link rel="stylesheet" href="treinos-style.css">
+    <link rel="stylesheet" href="nav-utils.css">
+</head>
+
+<body>
+    <!--Inicio da seção do parallax com o cabeçalho.-->
+    <header class="parallax-header">
+        <div class="parallax-logo">
+            <img src="img/logo.webp" class="logo">
+        </div>
+        <div class="parallax-links">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="index.html#planos">Planos</a></li>
+                    <li><a href="index.html#unidades">Unidades</a></li>
+                    <li><a href="index.html#aulas">Aulas</a></li>
+                    <li><a href="index.html#contato">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h1>Meus Treinos</h1>
+        
+        <div id="treinos-container">
+            <div class="loading">Carregando seus treinos...</div>
+        </div>
+        
+        <div class="medidas-link" style="text-align: center; margin-top: 30px;">
+            <a href="minhas-medidas.html" class="medidas-btn">Ver Minhas Medidas</a>
+        </div>
+    </main>
+    
+    <footer id="contato">
+        <h2>Fale conosco</h2>
+        <p>Email: contato@unigym.com.br</p>
+        <p>Telefone: (21) 97551-3181</p>
+        <a href="https://wa.me/5521975513181" target="_blank" class="whatsapp-btn">
+            📱 Fale conosco pelo WhatsApp
+        </a>
+        <p class="copyright">© 2025 UniGym. Todos os direitos reservados.</p>
+    </footer>
+    
+    <script src="treinos-script.js"></script>
+    <script src="debug-script.js"></script>
+</body>
+</html>
