@@ -6,11 +6,11 @@
 
 Para executar o projeto UniGym, você precisará ter os seguintes componentes instalados:
 
-- **Java 21** - O projeto utiliza Java 21, conforme configurado no pom.xml
-- **Maven 3.8+** - Para gerenciamento de dependências e build do projeto
-- **Banco de dados H2** - Incluído como dependência (não requer instalação separada)
-- **Navegador web moderno** - Chrome, Firefox, Edge ou Safari para acessar a interface
-- **Portas disponíveis** - A aplicação utiliza por padrão a porta 8080
+- **Java 21** - O projeto utiliza Java 21, já que foi iniciado antes do lançamento do LTS 25, porém não afeta em nada, já que a versão 25 é mais focada em concorrencia pelo que eu li
+- **Maven 3.8+** - Para gerenciamento de dependências e build do projeto.
+- **Banco de dados H2** - Incluído como dependência (não requer instalação separada).
+- **Navegador web moderno** - Chrome, Firefox, Edge ou Safari para acessar a interface.
+- **Portas disponíveis** - A aplicação utiliza por padrão a porta 8080.
 
 ### Instruções para Execução
 
