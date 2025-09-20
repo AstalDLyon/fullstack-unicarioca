@@ -1,0 +1,169 @@
+/**
+ * treinos-style.css
+ *
+ * Este arquivo contém os estilos específicos para a página de treinos do sistema UniGym.
+ * Ele define a aparência dos cards de treino, exercícios, e organiza a visualização
+ * das fichas de treino dos alunos de forma clara e intuitiva.
+ *
+ * Seções principais:
+ * - Containers de treino
+ * - Cabeçalhos e títulos de treino
+ * - Cards de exercícios
+ * - Agrupamento por dia da semana
+ * - Estados de loading e mensagens
+ * - Responsividade para diferentes dispositivos
+ *
+ * Este arquivo complementa o index-style.css, adicionando estilos específicos
+ * para a funcionalidade de visualização de treinos.
+ */
+
+.treino-container {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.treino-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.treino-title {
+    font-size: 1.5rem;
+    color: #a01f22;
+}
+
+.treino-date {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.treino-description {
+    margin-bottom: 20px;
+    color: #444;
+}
+
+.dias-treino {
+    display: flex;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    gap: 10px;
+}
+
+.dia-btn {
+    padding: 8px 15px;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    min-width: 100px;
+    text-align: center;
+}
+
+.dia-btn.active {
+    background-color: #a01f22;
+    color: white;
+}
+
+.exercicios-lista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.exercicio-item {
+    padding: 15px;
+    border-radius: 5px;
+    background-color: white;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.exercicio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.exercicio-nome {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.exercicio-grupo {
+    color: #666;
+    font-size: 0.9rem;
+    background-color: #f0f0f0;
+    padding: 3px 8px;
+    border-radius: 12px;
+}
+
+.exercicio-detalhes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.exercicio-detalhe {
+    flex: 1;
+    min-width: 100px;
+}
+
+.detalhe-label {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.detalhe-valor {
+    font-weight: 500;
+}
+
+.exercicio-obs {
+    margin-top: 10px;
+    font-style: italic;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.sem-treinos {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Estilos para mensagens de erro */
+.erro {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .exercicio-detalhes {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .exercicio-detalhe {
+        min-width: auto;
+    }
+}

@@ -1,0 +1,196 @@
+/**
+ * medidas-style.css
+ *
+ * Este arquivo contém os estilos específicos para a página de medidas corporais do sistema UniGym.
+ * Ele define a aparência dos componentes de visualização de medidas, histórico e gráficos
+ * de evolução física dos alunos.
+ *
+ * Seções principais:
+ * - Layout de containers de medidas
+ * - Sistema de abas para diferentes visualizações
+ * - Tabelas de histórico de medidas
+ * - Cards de última medida
+ * - Estilos para gráficos de evolução
+ * - Indicadores visuais (cores para IMC, progresso, etc.)
+ * - Estados de loading e mensagens
+ * - Responsividade para diferentes dispositivos
+ *
+ * Este arquivo complementa o index-style.css, adicionando estilos específicos
+ * para a funcionalidade de visualização de medidas corporais.
+ */
+
+.medidas-container {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.medidas-header {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.medidas-title {
+    font-size: 1.8rem;
+    color: #a01f22;
+    margin-bottom: 10px;
+}
+
+.medidas-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    font-weight: normal;
+}
+
+.medidas-atual {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.medida-item {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.medida-valor {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #a01f22;
+    margin-bottom: 5px;
+}
+
+.medida-nome {
+    color: #444;
+    font-size: 0.9rem;
+}
+
+.medida-data {
+    color: #888;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.grafico-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.grafico-titulo {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: #444;
+    text-align: center;
+}
+
+.historico-container {
+    margin-top: 40px;
+}
+
+.historico-header {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.historico-title {
+    font-size: 1.4rem;
+    color: #444;
+}
+
+.historico-filtros {
+    display: flex;
+    gap: 10px;
+}
+
+.filtro-btn {
+    padding: 8px 15px;
+    background-color: #e6e6e6;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.filtro-btn.active {
+    background-color: #a01f22;
+    color: white;
+}
+
+.historico-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.historico-table th,
+.historico-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.historico-table th {
+    background-color: #f2f2f2;
+    color: #444;
+    font-weight: 600;
+}
+
+.historico-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.sem-medidas {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Estilos para mensagens de erro */
+.erro {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .medidas-atual {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .historico-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .historico-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .medidas-atual {
+        grid-template-columns: 1fr;
+    }
+}

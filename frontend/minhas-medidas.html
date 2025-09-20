@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!--
+  minhas-medidas.html
+
+  Esta página apresenta o histórico e evolução das medidas corporais do aluno.
+  Permite que os alunos visualizem suas medidas registradas por instrutores ao
+  longo do tempo, acompanhando sua evolução através de tabelas e gráficos.
+  
+  Conteúdo principal:
+  - Tabela com histórico de medidas (peso, altura, percentual de gordura, etc.)
+  - Gráficos de evolução temporal para visualização de progresso
+  - Filtros por período/data
+  - Estatísticas e comparações entre períodos
+  
+  Comportamento:
+  - Carregamento de dados de medidas via API
+  - Geração de gráficos dinâmicos usando Chart.js
+  - Ordenação e filtragem de dados
+  - Atualização em tempo real quando novas medidas são registradas
+  - Exportação de dados (se implementado)
+  
+  Arquivos relacionados:
+  - medidas-style.css: Estilos específicos para visualização de medidas
+  - medidas-script.js: Lógica de carregamento e exibição de dados
+  - auth-script.js: Verificação de autenticação e permissões
+-->
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Medidas - UniGym</title>
+    <link rel="stylesheet" href="index-style.css">
+    <link rel="stylesheet" href="medidas-style.css">
+    <link rel="stylesheet" href="nav-utils.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!--Inicio da seção do parallax com o cabeçalho.-->
+    <header class="parallax-header">
+        <div class="parallax-logo">
+            <img src="img/logo.webp" class="logo">
+        </div>
+        <div class="parallax-links">
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="meus-treinos.html">Meus Treinos</a></li>
+                    <li><a href="index.html#planos">Planos</a></li>
+                    <li><a href="index.html#unidades">Unidades</a></li>
+                    <li><a href="index.html#contato">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h1>Histórico de Medidas</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="resumo">Resumo</button>
+            <button class="tab-btn" data-tab="historico">Histórico Completo</button>
+            <button class="tab-btn" data-tab="graficos">Gráficos de Evolução</button>
+        </div>
+        
+        <div id="tab-resumo" class="tab-content active">
+            <div id="ultima-medida-container" class="loading">
+                Carregando medidas...
+            </div>
+        </div>
+        
+        <div id="tab-historico" class="tab-content">
+            <div id="historico-container" class="loading">
+                Carregando histórico de medidas...
+            </div>
+        </div>
+        
+        <div id="tab-graficos" class="tab-content">
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Evolução do Peso</h3>
+                    <canvas id="pesoChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Evolução da % de Gordura</h3>
+                    <canvas id="gorduraChart"></canvas>
+                </div>
+            </div>
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Evolução das Medidas</h3>
+                    <canvas id="medidasChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Índice de Massa Corporal</h3>
+                    <canvas id="imcChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer id="contato">
+        <h2>Fale conosco</h2>
+        <p>Email: contato@unigym.com.br</p>
+        <p>Telefone: (21) 97551-3181</p>
+        <a href="https://wa.me/5521975513181" target="_blank" class="whatsapp-btn">
+            📱 Fale conosco pelo WhatsApp
+        </a>
+        <p class="copyright">© 2025 UniGym. Todos os direitos reservados.</p>
+    </footer>
+    
+    <script src="medidas-script.js"></script>
+    <script src="debug-script.js"></script>
+</body>
+</html>
