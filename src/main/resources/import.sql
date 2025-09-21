@@ -35,7 +35,7 @@ INSERT INTO Alunos(instrutor_id, nome, email, senha) VALUES (2, 'Ana', 'ana@emai
 -- =============================================================================
 -- TREINOS
 -- =============================================================================
--- Treinos de exemplo (atualizados para 2025)
+-- Treinos de exemplo
 INSERT INTO Treinos(nome, descricao, data_inicio, data_fim, aluno_id, instrutor_id) VALUES ('Treino Iniciante A', 'Treino para adaptação muscular', '2025-09-01', '2025-11-01', 1, 1);
 INSERT INTO Treinos(nome, descricao, data_inicio, data_fim, aluno_id, instrutor_id) VALUES ('Treino Hipertrofia', 'Foco em ganho de massa muscular', '2025-09-15', NULL, 1, 1);
 INSERT INTO Treinos(nome, descricao, data_inicio, data_fim, aluno_id, instrutor_id) VALUES ('Treino Cardio', 'Treino para melhorar condicionamento', '2025-09-10', NULL, 2, 1);

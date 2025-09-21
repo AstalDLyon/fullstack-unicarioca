@@ -1,7 +1,6 @@
 package com.Unigym.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore; // Evita serialização recursiva de Treino
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,8 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Exercicios")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Table(name = "Exercicios") // Tabela principal de exercícios
 
 public class Exercicio {
     
@@ -27,10 +25,11 @@ public class Exercicio {
     private int repeticoes;
     private String carga;
     private String observacoes;
-    private String diaSemana; // ex: "SEGUNDA", "TERCA", etc.
+    private String diaSemana; // Ex: SEGUNDA, TERCA
     
     @ManyToOne
     @JoinColumn(name = "treino_id")
+    @JsonIgnore // Remove referência ao Treino no JSON para prevenir loop e payload poluído
     private Treino treino;
     
     public Exercicio() {

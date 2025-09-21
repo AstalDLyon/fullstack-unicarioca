@@ -54,6 +54,7 @@
     margin-bottom: 20px;
     overflow-x: auto;
     gap: 10px;
+    padding-bottom: 5px; /* Espaço para scrollbar */
 }
 
 .dia-btn {
@@ -65,11 +66,45 @@
     font-weight: 500;
     min-width: 100px;
     text-align: center;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.dia-btn:hover:not([disabled]) {
+    background-color: #d1d1d1;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .dia-btn.active {
     background-color: #a01f22;
     color: white;
+    box-shadow: 0 2px 5px rgba(160, 31, 34, 0.3);
+}
+
+.dia-btn.active:hover {
+    background-color: #8a1a1d;
+}
+
+.dia-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f0f0f0;
+    color: #999;
+}
+
+/* Indicador visual para dias com exercícios */
+.dia-btn:not([disabled])::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: #a01f22;
+    border-radius: 50%;
+    opacity: 0.7;
 }
 
 .exercicios-lista {
