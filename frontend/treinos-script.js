@@ -141,105 +141,146 @@ function carregarTreinos(alunoId) {
 }
 
 function carregarDiasTreino(treinoId) {
+    console.log('Carregando dias de treino para o treino ID:', treinoId);
+    
+    // Elemento onde os dias serão exibidos
+    const diaContainer = document.getElementById(`dias-treino-${treinoId}`);
+    diaContainer.innerHTML = '<div class="loading">Carregando dias de treino...</div>';
+    
+    // Mapeamento ordem + label apenas para dias existentes (remove dias artificiais)
+    const MAP_ORDER = { SEGUNDA:1, TERCA:2, TERÇA:2, QUARTA:3, QUINTA:4, SEXTA:5 };
+    const MAP_EXIBE = { SEGUNDA:'Segunda', TERCA:'Terça', 'TERÇA':'Terça', QUARTA:'Quarta', QUINTA:'Quinta', SEXTA:'Sexta' };
+    
     fetch(`http://localhost:8080/api/exercicios/treino/${treinoId}`)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Falha ao carregar exercícios');
+                throw new Error(`Falha ao carregar exercícios: ${response.status} ${response.statusText}`);
             }
             return response.json();
         })
         .then(exercicios => {
-            // Extrair dias únicos de treino
-            const diasUnicos = [...new Set(exercicios.map(exercicio => exercicio.diaSemana))];
+            console.log('Resposta do servidor para treino ' + treinoId + ':', exercicios);
             
-            if (diasUnicos.length === 0) {
-                document.getElementById(`dias-treino-${treinoId}`).innerHTML = `
-                    <p>Nenhum exercício cadastrado para este treino.</p>
-                `;
+            // Verificação de segurança
+            if (!Array.isArray(exercicios)) {
+                console.error('Resposta de exercícios não é um array:', exercicios);
+                diaContainer.innerHTML = '<p>Erro ao processar dados de exercícios.</p>';
                 return;
             }
             
-            // Ordenar os dias da semana
-            const ordemDias = {
-                'Segunda': 1, 
-                'Terça': 2, 
-                'Quarta': 3, 
-                'Quinta': 4, 
-                'Sexta': 5, 
-                'Sábado': 6, 
-                'Domingo': 7
-            };
+            if (exercicios.length === 0) {
+                diaContainer.innerHTML = '<p>Nenhum exercício cadastrado para este treino.</p>';
+                return;
+            }
             
-            diasUnicos.sort((a, b) => ordemDias[a] - ordemDias[b]);
-            
-            // Construir os botões para os dias de treino
-            let html = '';
-            diasUnicos.forEach((dia, index) => {
-                html += `
-                    <button class="dia-btn ${index === 0 ? 'active' : ''}" 
-                            data-treino-id="${treinoId}" 
-                            data-dia="${dia}">
-                        ${dia}
-                    </button>
-                `;
-            });
-            
-            const diaContainer = document.getElementById(`dias-treino-${treinoId}`);
-            diaContainer.innerHTML = html;
-            
-            // Adicionar listeners aos botões
+            // Extrai dias distintos válidos do payload recebido
+            const diasValidos = [...new Set(exercicios
+                .map(e => (e && e.diaSemana) ? e.diaSemana.toUpperCase() : null)
+                .filter(d => d && MAP_ORDER[d] !== undefined))]
+                .sort((a,b) => MAP_ORDER[a]-MAP_ORDER[b]);
+
+            console.log('Dias válidos detectados:', diasValidos);
+
+            if (diasValidos.length === 0) {
+                diaContainer.innerHTML = '<p>Nenhum dia de treino válido encontrado.</p>';
+                return;
+            }
+
+            // Gera somente botões dos dias presentes (evita disabled)
+            diaContainer.innerHTML = diasValidos.map((dia, idx) => `
+                <button class="dia-btn ${idx===0?'active':''}" data-treino-id="${treinoId}" data-dia="${dia}">${MAP_EXIBE[dia]||dia}</button>
+            `).join('');
+
+            // Listeners de clique: alterna active e busca exercícios para o dia
             const botoes = diaContainer.querySelectorAll('.dia-btn');
-            botoes.forEach(botao => {
-                botao.addEventListener('click', function() {
-                    // Remover classe ativa de todos os botões deste treino
-                    botoes.forEach(b => b.classList.remove('active'));
-                    
-                    // Adicionar classe ativa ao botão clicado
-                    this.classList.add('active');
-                    
-                    // Carregar exercícios para o dia selecionado
-                    const dia = this.dataset.dia;
-                    carregarExerciciosPorDia(treinoId, dia);
+            botoes.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    botoes.forEach(b=>b.classList.remove('active'));
+                    btn.classList.add('active');
+                    carregarExerciciosPorDia(treinoId, btn.dataset.dia);
                 });
             });
-            
-            // Carregar exercícios para o primeiro dia (selecionado por padrão)
-            if (diasUnicos.length > 0) {
-                carregarExerciciosPorDia(treinoId, diasUnicos[0]);
-            }
+
+            // Auto-carrega primeiro dia válido
+            carregarExerciciosPorDia(treinoId, diasValidos[0]);
         })
         .catch(error => {
             console.error('Erro ao carregar dias de treino:', error);
-            document.getElementById(`dias-treino-${treinoId}`).innerHTML = `
+            diaContainer.innerHTML = `
                 <div class="erro">
-                    <p>Ocorreu um erro ao carregar os dias de treino.</p>
+                    <p>Ocorreu um erro ao carregar os dias de treino: ${error.message}</p>
                 </div>
             `;
         });
 }
 
 function carregarExerciciosPorDia(treinoId, diaSemana) {
-    fetch(`http://localhost:8080/api/exercicios/treino/${treinoId}?diaSemana=${diaSemana}`)
+    // Verificar se diaSemana está definido
+    if (!diaSemana) {
+        console.error('Dia da semana não definido para o treino ID:', treinoId);
+        const exerciciosContainer = document.getElementById(`exercicios-${treinoId}`);
+        exerciciosContainer.innerHTML = `
+            <div class="erro">
+                <p>Não foi possível carregar os exercícios. Dia da semana não especificado.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    console.log(`Carregando exercícios para o treino ${treinoId}, dia "${diaSemana}"`);
+    
+    // Usa formato exato retornado; evita divergências de normalização
+    
+    const exerciciosContainer = document.getElementById(`exercicios-${treinoId}`);
+    exerciciosContainer.innerHTML = '<div class="loading">Carregando exercícios...</div>';
+    
+    // URL da API - usar o valor exato do dia que veio do botão (que foi preservado do valor original do backend)
+    const url = `http://localhost:8080/api/exercicios/treino/${treinoId}?diaSemana=${encodeURIComponent(diaSemana)}`;
+    console.log('URL da requisição:', url);
+    
+    const inicioReq = performance.now(); // Métrica simples de latência
+    fetch(url)
         .then(response => {
+            console.log('[REQ EXERCICIOS] Status:', response.status, '| Dia enviado:', diaSemana, '| URL:', url);
             if (!response.ok) {
-                throw new Error('Falha ao carregar exercícios');
+                throw new Error(`Falha ao carregar exercícios: ${response.status} ${response.statusText}`);
             }
-            return response.json();
+            return response.text().then(txt => {
+                const dur = (performance.now() - inicioReq).toFixed(1);
+                console.log(`[REQ EXERCICIOS] Tempo ${dur}ms | Payload bruto (${txt.length} chars)`); // Log diagnóstico
+                try {
+                    return JSON.parse(txt);
+                } catch(e){
+                    console.error('Falha parse JSON exercícios:', e, 'Texto recebido:', txt);
+                    throw new Error('JSON inválido nos exercícios');
+                }
+            });
         })
         .then(exercicios => {
-            const exerciciosContainer = document.getElementById(`exercicios-${treinoId}`);
+            console.log(`Exercícios recebidos para o dia "${diaSemana}" (qtde=${Array.isArray(exercicios)?exercicios.length:'N/A'}):`, exercicios);
+            if (Array.isArray(exercicios)) { // Log enumerado por exercício
+                exercicios.forEach((ex,i)=>{
+                    console.log(`[EX ${i}] id=${ex.id} nome=${ex.nome} dia='${ex.diaSemana}' grupo=${ex.grupoMuscular}`);
+                });
+            }
             
-            if (exercicios.length === 0) {
+            if (!Array.isArray(exercicios)) {
+                console.error('Resposta de exercícios não é um array:', exercicios);
+                exerciciosContainer.innerHTML = '<p>Erro ao processar dados de exercícios.</p>';
+                return;
+            }
+            
+            if (Array.isArray(exercicios) && exercicios.length === 0) {
+                // Formatar dia para exibição
+                const diaExibicao = formatarDiaParaExibicao(diaSemana);
+                
                 exerciciosContainer.innerHTML = `
-                    <p>Nenhum exercício cadastrado para ${diaSemana}.</p>
+                    <p>Nenhum exercício cadastrado para ${diaExibicao}.</p>
                 `;
                 return;
             }
             
-            // Ordenar exercícios por ordem
-            exercicios.sort((a, b) => a.ordem - b.ordem);
-            
-            // Construir a lista de exercícios
+            // Mantém ordem recebida (campo 'ordem' não existe no modelo atual)
             let html = '<ul class="exercicios-lista">';
             
             exercicios.forEach(exercicio => {
@@ -259,10 +300,11 @@ function carregarExerciciosPorDia(treinoId, diaSemana) {
                                 <div class="detalhe-label">Repetições</div>
                                 <div class="detalhe-valor">${exercicio.repeticoes}</div>
                             </div>
+                            ${exercicio.descanso ? `
                             <div class="exercicio-detalhe">
                                 <div class="detalhe-label">Descanso</div>
                                 <div class="detalhe-valor">${exercicio.descanso}s</div>
-                            </div>
+                            </div>` : ''}
                             <div class="exercicio-detalhe">
                                 <div class="detalhe-label">Carga</div>
                                 <div class="detalhe-valor">${exercicio.carga || '-'}</div>
@@ -283,10 +325,75 @@ function carregarExerciciosPorDia(treinoId, diaSemana) {
         })
         .catch(error => {
             console.error('Erro ao carregar exercícios:', error);
-            document.getElementById(`exercicios-${treinoId}`).innerHTML = `
+            exerciciosContainer.innerHTML = `
                 <div class="erro">
-                    <p>Ocorreu um erro ao carregar os exercícios.</p>
+                    <p>Ocorreu um erro ao carregar os exercícios: ${error.message}</p>
                 </div>
             `;
         });
+}
+
+/**
+ * Formata o dia da semana para exibição amigável ao usuário
+ * @param {string} dia - O dia da semana a ser formatado
+ * @returns {string} - O dia da semana formatado
+ */
+function formatarDiaParaExibicao(dia) {
+    if (!dia) return 'Dia não especificado';
+    
+    // Mapeamento para exibição
+    const mapeamentoDias = {
+        'SEGUNDA': 'Segunda',
+        'TERCA': 'Terça',
+        'TERÇA': 'Terça',
+        'QUARTA': 'Quarta',
+        'QUINTA': 'Quinta',
+        'SEXTA': 'Sexta',
+        'SABADO': 'Sábado',
+        'SÁBADO': 'Sábado',
+        'DOMINGO': 'Domingo'
+    };
+    
+    return mapeamentoDias[dia] || dia;
+}
+
+/**
+ * Normaliza o dia da semana para corresponder ao formato salvo no banco de dados
+ * Remove acentos e mantém o texto em maiúsculas
+ * @param {string} dia - O dia da semana a ser normalizado
+ * @returns {string} - O dia da semana normalizado
+ */
+function normalizarDiaSemana(dia) {
+    // Se dia for undefined ou null, retorna uma string vazia
+    if (dia === undefined || dia === null) {
+        console.error('Dia da semana recebido como undefined ou null');
+        return '';
+    }
+    
+    // Verificar se é uma string antes de continuar
+    if (typeof dia !== 'string') {
+        console.error('Dia da semana não é uma string:', dia);
+        return String(dia); // Tenta converter para string
+    }
+    
+    // Converter para maiúsculas para garantir consistência
+    const diaUpper = dia.toUpperCase();
+    
+    // Mapeamento de dias com acentos para dias sem acentos
+    const mapeamentoDias = {
+        'SEGUNDA': 'SEGUNDA',
+        'TERÇA': 'TERCA',
+        'TERCA': 'TERCA',
+        'QUARTA': 'QUARTA',
+        'QUINTA': 'QUINTA',
+        'SEXTA': 'SEXTA',
+        'SÁBADO': 'SABADO',
+        'SABADO': 'SABADO',
+        'DOMINGO': 'DOMINGO'
+    };
+    
+    // Retorna o dia normalizado ou o dia original se não estiver no mapeamento
+    const diaNormalizado = mapeamentoDias[diaUpper] || diaUpper;
+    console.log(`Normalizando dia da semana: "${dia}" -> "${diaNormalizado}"`);
+    return diaNormalizado;
 }
