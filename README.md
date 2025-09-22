@@ -107,7 +107,7 @@ Desenvolvida em Java com Spring Boot, utilizando Spring Web, Spring Data JPA, H2
 - [x] Funcionalidade de logout
 
 #### Cadastro e Gerenciamento
-- [x] Cadastro de alunos, instrutores, treinos e medidas
+- [ ] Cadastro de alunos, instrutores, treinos e medidas
 - [x] Persistência em banco de dados H2
 - [x] Relacionamentos entre entidades (aluno-treino, treino-exercício, etc.)
 
@@ -115,7 +115,7 @@ Desenvolvida em Java com Spring Boot, utilizando Spring Web, Spring Data JPA, H2
 - [x] Consulta de treinos por aluno
 - [x] Exibição de treinos organizados por dia da semana
 - [x] Consulta de histórico de medidas corporais
-- [x] Visualização de detalhes de exercícios
+- [ ] Visualização de detalhes de exercícios
 
 #### Interface de Usuário
 - [x] Página inicial com informações sobre a academia
