@@ -10,16 +10,7 @@ document.querySelectorAll('nav a').forEach(link => {
     });
 });
 
-// Simulação de busca de unidades
-document.querySelector('.unidades button').addEventListener('click', () => {
-    const input = document.querySelector('.unidades input').value.trim();
-    if (input) {
-        alert(`Buscando unidades próximas de: ${input}`);
-        // Aqui você poderia integrar com uma API de mapas ou geolocalização
-    } else {
-        alert('Por favor, digite uma cidade ou CEP.');
-    }
-});
+
 
 // Destaque ao selecionar plano
 document.querySelectorAll('.plano-card').forEach(card => {

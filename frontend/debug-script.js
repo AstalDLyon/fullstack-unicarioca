@@ -22,6 +22,7 @@
  * e não deve ser incluído em produção.
  */
 
+
 document.addEventListener('DOMContentLoaded', function() {
     const testSection = document.createElement('div');
     testSection.className = 'test-section';
