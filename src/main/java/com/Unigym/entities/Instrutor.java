@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 
 @Entity
 @Table(name = "Instrutores")
@@ -14,6 +15,11 @@ public class Instrutor {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // definindo id como chave primaria
     private Long id;
     private String nome;
+    
+    @Column(unique = true)
+    private String email;
+    
+    private String senha;
 
     public Instrutor() {
 
@@ -31,6 +37,22 @@ public class Instrutor {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public String getSenha() {
+        return senha;
+    }
+    
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
 }

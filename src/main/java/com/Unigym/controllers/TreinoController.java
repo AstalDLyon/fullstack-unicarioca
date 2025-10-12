@@ -1,6 +1,7 @@
 package com.Unigym.controllers;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Unigym.entities.Aluno;
+import com.Unigym.entities.Exercicio;
 import com.Unigym.entities.Treino;
 import com.Unigym.repositories.AlunoRepository;
 import com.Unigym.repositories.TreinoRepository;
@@ -28,6 +30,13 @@ public class TreinoController {
     
     @Autowired
     private AlunoRepository alunoRepository;
+
+    // Lista todos os treinos existentes (para seleção na área do instrutor)
+    @GetMapping
+    public ResponseEntity<List<Treino>> listarTodos() {
+        List<Treino> treinos = treinoRepository.findAll();
+        return ResponseEntity.ok(treinos);
+    }
     
     @GetMapping("/{treinoId}")
     public ResponseEntity<Treino> getTreino(@PathVariable Long treinoId) {
@@ -87,5 +96,59 @@ public class TreinoController {
     public ResponseEntity<Treino> criarTreino(@RequestBody Treino treino) {
         Treino novoTreino = treinoRepository.save(treino);
         return ResponseEntity.ok(novoTreino);
+    }
+
+    // Atribui (clona) um treino existente para um aluno específico
+    // Cria um novo Treino copiando os dados do original e replicando os exercícios
+    @PostMapping("/{treinoId}/atribuir/{alunoId}")
+    public ResponseEntity<Treino> atribuirTreinoParaAluno(@PathVariable Long treinoId, @PathVariable Long alunoId) {
+        try {
+            var treinoOriginalOpt = treinoRepository.findById(treinoId);
+            if (treinoOriginalOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            var alunoOpt = alunoRepository.findById(alunoId);
+            if (alunoOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Treino treinoOriginal = treinoOriginalOpt.get();
+            Aluno aluno = alunoOpt.get();
+
+            // Novo treino baseado no original
+            Treino novo = new Treino();
+            novo.setNome(treinoOriginal.getNome());
+            novo.setDescricao(treinoOriginal.getDescricao());
+            novo.setDataInicio(LocalDate.now());
+            novo.setDataFim(null);
+            novo.setAluno(aluno);
+            novo.setInstrutor(treinoOriginal.getInstrutor()); // mantém instrutor do treino original
+
+            // Clona os exercícios
+            List<Exercicio> exerciciosClonados = new ArrayList<>();
+            if (treinoOriginal.getExercicios() != null) {
+                for (Exercicio e : treinoOriginal.getExercicios()) {
+                    Exercicio clone = new Exercicio();
+                    clone.setNome(e.getNome());
+                    clone.setGrupoMuscular(e.getGrupoMuscular());
+                    clone.setSeries(e.getSeries());
+                    clone.setRepeticoes(e.getRepeticoes());
+                    clone.setCarga(e.getCarga());
+                    clone.setObservacoes(e.getObservacoes());
+                    clone.setDiaSemana(e.getDiaSemana());
+                    // Relaciona ao novo treino
+                    clone.setTreino(novo);
+                    exerciciosClonados.add(clone);
+                }
+            }
+            novo.setExercicios(exerciciosClonados);
+
+            Treino salvo = treinoRepository.save(novo); // Cascade.ALL persiste os exercícios
+            return ResponseEntity.ok(salvo);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
     }
 }

@@ -47,22 +47,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(dados)
             })
             .then(response => response.json())
-            .then(data => {
+                        .then(data => {
                 const mensagemElement = document.getElementById('mensagem');
                 mensagemElement.style.display = 'block';
                 
                 if (data.success) {
                     // Login bem-sucedido
-                    mensagemElement.textContent = 'Login realizado com sucesso! Redirecionando...';
+                                        mensagemElement.textContent = 'Login realizado com sucesso! Redirecionando...';
                     mensagemElement.style.color = 'green';
                     
                     // Armazenar informações do usuário no localStorage
                     localStorage.setItem('usuarioId', data.id);
                     localStorage.setItem('usuarioNome', data.nome);
+                                        if (data.role) localStorage.setItem('usuarioRole', data.role);
                     
                     // Redirecionar para a página principal após um breve delay
                     setTimeout(() => {
-                        window.location.href = 'meus-treinos.html';
+                                                if (data.redirect) {
+                                                    window.location.href = data.redirect.replace(/^\//, '');
+                                                } else if (data.role === 'INSTRUTOR') {
+                                                    window.location.href = 'area-instrutor.html';
+                                                } else {
+                                                    window.location.href = 'meus-treinos.html';
+                                                }
                     }, 1500);
                 } else {
                     // Login falhou

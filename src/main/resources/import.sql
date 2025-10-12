@@ -20,8 +20,8 @@
 -- =============================================================================
 -- INSTRUTORES
 -- =============================================================================
-INSERT INTO Instrutores(nome) VALUES ('Sergio');
-INSERT INTO Instrutores(nome) VALUES ('Caio');
+INSERT INTO Instrutores(nome, email, senha) VALUES ('Sergio', 'sergio@unigym.com', '123456');
+INSERT INTO Instrutores(nome, email, senha) VALUES ('Caio', 'caio@unigym.com', '123456');
 
 -- =============================================================================
 -- ALUNOS
