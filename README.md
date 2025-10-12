@@ -114,7 +114,7 @@ Desenvolvida em Java com Spring Boot, utilizando Spring Web, Spring Data JPA, H2
 #### Visualização de Dados
 - [x] Consulta de treinos por aluno
 - [x] Exibição de treinos organizados por dia da semana
-- [x] Consulta de histórico de medidas corporais
+- [ ] Consulta de histórico de medidas corporais
 - [ ] Visualização de detalhes de exercícios
 
 #### Interface de Usuário
