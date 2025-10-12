@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import com.Unigym.entities.Instrutor;
 import com.Unigym.repositories.InstrutorRepository;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/instrutores") //// se eu acessar o localhost:8080/instrutores estarei acessando aqui
 public class InstrutorController {
 

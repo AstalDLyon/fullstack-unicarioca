@@ -114,7 +114,7 @@ Desenvolvida em Java com Spring Boot, utilizando Spring Web, Spring Data JPA, H2
 #### Visualização de Dados
 - [x] Consulta de treinos por aluno
 - [x] Exibição de treinos organizados por dia da semana
-- [ ] Consulta de histórico de medidas corporais
+- [x] Consulta de histórico de medidas corporais
 - [ ] Visualização de detalhes de exercícios
 
 #### Interface de Usuário
@@ -129,13 +129,4 @@ Desenvolvida em Java com Spring Boot, utilizando Spring Web, Spring Data JPA, H2
 - [x] Endpoints para gerenciamento de treinos e exercícios
 - [x] Endpoints para gerenciamento de medidas corporais
 
-### Funcionalidades Planejadas
 
-- [ ] Análise avançada de progresso com gráficos // talvez, nunca fiz grafico em java muito menos JS preciso pesquisar
-
----
-#  Tutorial de Teste
-
-Será definido depois.
-
----
