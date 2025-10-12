@@ -135,35 +135,25 @@ INSERT INTO Exercicios(nome, grupo_muscular, series, repeticoes, carga, observac
 -- MEDIDAS
 -- =============================================================================
 -- Medidas para o aluno Maria (ID 1)
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-06-10', 65.5, 1.65, 24.06, 28.0, 28.0, 92.0, 75.0, 98.0, 52.0, 36.0, 'Avaliação inicial', 1, 1);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-06-10', 65.5, 1.65, 24.06, 28.0, 28.0, 92.0, 75.0, 98.0, 52.0, 36.0, 'Avaliação inicial', 1, 1);
 
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-07-10', 64.2, 1.65, 23.58, 27.0, 28.5, 91.5, 73.5, 97.0, 52.5, 36.0, 'Progresso após 30 dias', 1, 1);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-07-10', 64.2, 1.65, 23.58, 27.0, 28.5, 91.5, 73.5, 97.0, 52.5, 36.0, 'Progresso após 30 dias', 1, 1);
 
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-08-10', 63.0, 1.65, 23.14, 26.0, 29.0, 91.0, 72.0, 96.0, 53.0, 36.5, 'Progresso após 60 dias', 1, 1);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-08-10', 63.0, 1.65, 23.14, 26.0, 29.0, 91.0, 72.0, 96.0, 53.0, 36.5, 'Progresso após 60 dias', 1, 1);
 
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-09-10', 62.5, 1.65, 22.96, 25.0, 29.5, 90.5, 71.0, 95.5, 53.5, 37.0, 'Progresso após 90 dias', 1, 1);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-09-10', 62.5, 1.65, 22.96, 25.0, 29.5, 90.5, 71.0, 95.5, 53.5, 37.0, 'Progresso após 90 dias', 1, 1);
 
 -- Medidas para o aluno Bob (ID 2)
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-07-15', 78.5, 1.78, 24.78, 18.0, 32.0, 98.0, 85.0, 95.0, 56.0, 38.0, 'Avaliação inicial', 2, 1);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-07-15', 78.5, 1.78, 24.78, 18.0, 32.0, 98.0, 85.0, 95.0, 56.0, 38.0, 'Avaliação inicial', 2, 1);
 
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-08-15', 80.0, 1.78, 25.25, 17.5, 33.0, 99.0, 84.0, 95.0, 57.0, 38.5, 'Progresso após 30 dias', 2, 1);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-08-15', 80.0, 1.78, 25.25, 17.5, 33.0, 99.0, 84.0, 95.0, 57.0, 38.5, 'Progresso após 30 dias', 2, 1);
 
 -- Medidas para o aluno Alex (ID 3)
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-08-02', 72.0, 1.75, 23.51, 15.0, 33.0, 96.0, 82.0, 93.0, 55.0, 37.0, 'Avaliação inicial', 3, 2);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-08-02', 72.0, 1.75, 23.51, 15.0, 33.0, 96.0, 82.0, 93.0, 55.0, 37.0, 'Avaliação inicial', 3, 2);
 
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-09-02', 74.5, 1.75, 24.33, 14.0, 34.5, 98.0, 81.0, 92.5, 56.5, 38.0, 'Progresso após 30 dias', 3, 2);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-09-02', 74.5, 1.75, 24.33, 14.0, 34.5, 98.0, 81.0, 92.5, 56.5, 38.0, 'Progresso após 30 dias', 3, 2);
 
 -- Medidas para a aluna Ana (ID 4)
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-08-10', 68.0, 1.62, 25.91, 32.0, 27.0, 90.0, 78.0, 102.0, 60.0, 35.0, 'Avaliação inicial', 4, 2);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-08-10', 68.0, 1.62, 25.91, 32.0, 27.0, 90.0, 78.0, 102.0, 60.0, 35.0, 'Avaliação inicial', 4, 2);
 
-INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) 
-VALUES ('2025-09-10', 66.5, 1.62, 25.34, 30.5, 26.5, 89.0, 76.0, 100.0, 59.0, 35.0, 'Progresso após 30 dias', 4, 2);
+INSERT INTO Medidas(data, peso, altura, imc, percentual_gordura, circunferencia_braco, circunferencia_peitoral, circunferencia_cintura, circunferencia_quadril, circunferencia_coxa, circunferencia_panturrilha, observacoes, aluno_id, instrutor_id) VALUES ('2025-09-10', 66.5, 1.62, 25.34, 30.5, 26.5, 89.0, 76.0, 100.0, 59.0, 35.0, 'Progresso após 30 dias', 4, 2);
