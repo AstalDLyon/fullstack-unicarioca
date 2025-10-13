@@ -1,0 +1,146 @@
+/*
+ * cadastrar-aluno-style.css
+ *
+ * Estilos dedicados para a página "Cadastrar Aluno" usando o esquema de cores da UniGym.
+ * Paleta principal: vermelho #a01f22, variações mais escuras para hover/foco e tons neutros.
+ */
+
+:root {
+  --uni-red: #a01f22;
+  --uni-red-dark: #801a1c;
+  --uni-red-deep: #6a1517;
+  --uni-bg: #f7f7f8;
+  --uni-white: #ffffff;
+  --uni-border: #e6e6e6;
+  --uni-text: #222;
+  --uni-muted: #6b7280;
+  --uni-radius: 12px;
+  --uni-shadow: 0 10px 30px rgba(0,0,0,.06);
+  --uni-focus: 0 0 0 3px rgba(160,31,34,.25);
+}
+
+/* Fundo e container */
+body {
+  background: linear-gradient(180deg, var(--uni-red), #ffffff);
+}
+
+.container {
+  width: min(92vw, 760px);
+  margin: 28px auto;
+  padding-inline: 16px; /* garante respiro lateral igual em todas as caixas */
+}
+
+h1 {
+  color: var(--uni-text);
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+/* Card do formulário */
+.card {
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--uni-border);
+  border-radius: var(--uni-radius);
+  box-shadow: var(--uni-shadow);
+  padding: 22px 20px 18px;
+  margin-inline: auto; /* centraliza o card se a largura mudar futuramente */
+}
+
+/* Espaçamento consistente entre cartões na mesma página */
+.card + .card {
+  margin-top: 20px;
+}
+
+/* Campos e labels */
+.form-group {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.form-group label {
+  font-size: .95rem;
+  color: var(--uni-muted);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%; /* garante que campos alinhem com a largura do card */
+  height: 44px;
+  border: 1px solid var(--uni-border);
+  border-radius: 10px;
+  padding: 0 12px;
+  background: var(--uni-white);
+  color: var(--uni-text);
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--uni-red);
+  box-shadow: var(--uni-focus);
+}
+
+/* Ações */
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.form-actions button[type="submit"] {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--uni-red);
+  color: #fff;
+  transition: background .2s, transform .02s;
+}
+
+.form-actions button[type="submit"]:hover {
+  background: var(--uni-red-dark);
+}
+
+.form-actions button[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+/* Mensagens */
+#mensagem {
+  text-align: center;
+  margin: 10px 0 0;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+#mensagem.success {
+  background-color: rgba(46, 160, 67, 0.1);
+  color: #2ea043;
+}
+
+#mensagem.error {
+  background-color: rgba(218, 54, 51, 0.1);
+  color: #da3633;
+}
+
+/* Navegação simples (garante contraste) */
+nav {
+  background: transparent;
+  padding: 12px 16px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+nav a:hover {
+  color: #f0f0f0;
+}

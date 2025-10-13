@@ -2,65 +2,20 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0; url=cadastrar-aluno.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Área do Instrutor - UniGym</title>
-  <link rel="stylesheet" href="nav-utils.css" />
-  <link rel="stylesheet" href="login-style.css" />
+  <title>Redirecionando…</title>
+  <script>
+    // Redireciona imediatamente sem manter histórico da página intermediária
+    (function(){
+      try { window.location.replace('cadastrar-aluno.html'); }
+      catch(e) { window.location.href = 'cadastrar-aluno.html'; }
+    })();
+  </script>
 </head>
 <body>
-  <nav>
-    <a href="index.html">Início</a>
-    <a href="meus-treinos.html">Área do Aluno</a>
-  </nav>
-
-  <main class="container">
-    <h1>Área do Instrutor</h1>
-
-    <section class="card" style="margin-bottom: 24px;">
-      <h2>Cadastrar Novo Aluno</h2>
-      <form id="novoAlunoForm">
-        <div class="form-group">
-          <label for="alunoNome">Nome</label>
-          <input id="alunoNome" required />
-        </div>
-        <div class="form-group">
-          <label for="alunoEmail">Email</label>
-          <input id="alunoEmail" type="email" required />
-        </div>
-        <div class="form-group">
-          <label for="alunoSenha">Senha</label>
-          <input id="alunoSenha" type="password" required minlength="4" />
-        </div>
-        <div class="form-actions">
-          <button type="submit">Cadastrar Aluno</button>
-        </div>
-        <p id="msgAluno" style="display:none"></p>
-      </form>
-    </section>
-
-    <section class="card">
-      <h2>Atribuir Treino Existente ao Aluno</h2>
-      <form id="atribuirForm">
-        <div class="form-group">
-          <label for="selAluno">Aluno</label>
-          <select id="selAluno" required>
-            <option value="">-- Selecione --</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="selTreino">Treino existente</label>
-          <select id="selTreino" required>
-            <option value="">-- Selecione --</option>
-          </select>
-        </div>
-        <div class="form-actions">
-          <button type="submit">Atribuir Treino</button>
-        </div>
-        <p id="msgAtribuir" style="display:none"></p>
-      </form>
-    </section>
-  </main>
-
-  <script src="area-instrutor-script.js"></script>
+  <noscript>
+    <p>Redirecionando para <a href="cadastrar-aluno.html">Cadastrar Aluno</a>…</p>
+  </noscript>
 </body>
 </html>

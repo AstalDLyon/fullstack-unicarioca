@@ -7,12 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.Unigym.entities.Aluno;
 import com.Unigym.repositories.AlunoRepository;
+import com.Unigym.repositories.MedidaRepository;
+import com.Unigym.repositories.TreinoRepository;
 
 /**
  * AlunoController
@@ -38,6 +44,12 @@ public class AlunoController {
 
     @Autowired
     private AlunoRepository repository;
+    
+    @Autowired
+    private MedidaRepository medidaRepository;
+
+    @Autowired
+    private TreinoRepository treinoRepository;
 
     /**
      * Retorna a lista de todos os alunos cadastrados no sistema
@@ -81,6 +93,29 @@ public class AlunoController {
     public Aluno insert(@RequestBody Aluno aluno) {
         Aluno result = repository.save(aluno);
         return result;
+    }
+    
+    /**
+     * Remove um aluno e seus dados relacionados (medidas e treinos)
+     * 
+     * Método HTTP: DELETE
+     * URL: /alunos/{id}
+     */
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        // Garante que o aluno exista
+        Aluno aluno = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado"));
+
+        // Remove medidas do aluno
+        medidaRepository.deleteAll(medidaRepository.findByAlunoId(id));
+        
+        // Remove treinos do aluno (Exercicios serão removidos por cascade no Treino)
+        treinoRepository.deleteAll(treinoRepository.findByAluno(aluno));
+        
+        // Por fim, remove o aluno
+        repository.delete(aluno);
     }
     
 }
