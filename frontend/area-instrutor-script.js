@@ -8,6 +8,7 @@
 
   const selAluno = document.getElementById('selAluno');
   const selTreino = document.getElementById('selTreino');
+  const btnExcluirAluno = document.getElementById('btnExcluirAluno');
 
   function showMsg(el, text, ok = false) {
     el.textContent = text;
@@ -27,6 +28,8 @@
         opt.textContent = `${a.id} - ${a.nome} (${a.email})`;
         selAluno.appendChild(opt);
       });
+      // desabilita o botão se nada estiver selecionado
+      btnExcluirAluno.disabled = !selAluno.value;
     } catch (e) {
       console.error(e);
       showMsg(msgAtribuir, 'Não foi possível carregar os alunos');
@@ -99,6 +102,32 @@
     } catch (e) {
       console.error(e);
       showMsg(msgAtribuir, 'Erro ao atribuir treino');
+    }
+  });
+
+  // Habilita/desabilita o botão Excluir conforme seleção
+  selAluno.addEventListener('change', () => {
+    btnExcluirAluno.disabled = !selAluno.value;
+  });
+
+  // Excluir aluno selecionado
+  btnExcluirAluno.addEventListener('click', async () => {
+    const alunoId = selAluno.value;
+    if (!alunoId) return;
+    const nomeSelecionado = selAluno.options[selAluno.selectedIndex]?.textContent || 'o aluno';
+    const confirmar = window.confirm(`Tem certeza que deseja excluir ${nomeSelecionado}?\nIsso removerá também seus treinos e medidas.`);
+    if (!confirmar) return;
+
+    try {
+      const r = await fetch(`http://localhost:8080/alunos/${alunoId}`, { method: 'DELETE' });
+      if (!r.ok && r.status !== 204) throw new Error(await r.text());
+      showMsg(msgAtribuir, 'Aluno excluído com sucesso', true);
+      await carregarAlunos();
+      // Limpa seleção de treino por segurança
+      selTreino.value = '';
+    } catch (e) {
+      console.error(e);
+      showMsg(msgAtribuir, 'Erro ao excluir aluno');
     }
   });
 

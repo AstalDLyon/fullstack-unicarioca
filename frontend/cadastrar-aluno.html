@@ -4,8 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Aluno - UniGym</title>
+  <link rel="stylesheet" href="index-style.css">
   <link rel="stylesheet" href="nav-utils.css" />
   <link rel="stylesheet" href="login-style.css" />
+  <link rel="stylesheet" href="cadastrar-aluno-style.css" />
 </head>
 <body>
   <nav>
@@ -44,6 +46,32 @@
       </div>
       <p id="mensagem" style="display:none"></p>
     </form>
+
+    <section class="card" style="margin-top: 20px;">
+      <h2 style="margin-bottom: 10px;">Atribuir Treino Existente ao Aluno</h2>
+      <form id="atribuirFormCadastro">
+        <div class="form-group">
+          <label for="selAlunoCadastro">Aluno</label>
+          <select id="selAlunoCadastro" required>
+            <option value="">-- Selecione --</option>
+          </select>
+          <button type="button" id="btnExcluirAlunoCadastro" style="margin-left:8px;background:#b00020;color:#fff;" disabled>
+            Excluir Aluno
+          </button>
+        </div>
+        <div class="form-group">
+          <label for="selTreinoCadastro">Treino existente</label>
+          <select id="selTreinoCadastro" required>
+            <option value="">-- Selecione --</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="submit">Atribuir Treino</button>
+        </div>
+        <p id="msgAtribuirCadastro" style="display:none"></p>
+        <p id="msgExcluirCadastro" style="display:none"></p>
+      </form>
+    </section>
   </main>
 
   <script src="cadastrar-aluno-script.js"></script>

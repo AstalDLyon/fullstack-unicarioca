@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 if (data.redirect) {
                                                     window.location.href = data.redirect.replace(/^\//, '');
                                                 } else if (data.role === 'INSTRUTOR') {
-                                                    window.location.href = 'area-instrutor.html';
+                                                    window.location.href = 'cadastrar-aluno.html';
                                                 } else {
                                                     window.location.href = 'meus-treinos.html';
                                                 }
