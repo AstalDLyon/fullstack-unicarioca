@@ -28,6 +28,13 @@
  * - Biblioteca ChartJS para geração de gráficos
  */
 
+// Estado global simples para facilitar atualizações sem reload
+let ultimaDataCache = null; // Armazena a data da última medida conhecida
+let pesoChartInstance = null;
+let gorduraChartInstance = null;
+let imcChartInstance = null;
+let medidasChartInstance = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar se o usuário está logado
     const usuarioId = localStorage.getItem('usuarioId');
@@ -76,9 +83,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Carregar medidas
+    // Carregar medidas iniciais
     carregarUltimaMedida(usuarioId);
     carregarHistoricoMedidas(usuarioId);
     carregarGraficos(usuarioId);
+
+    // Atualização automática sem reload
+    // - Verifica periodicamente se houve nova medida (compara data da última)
+    // - Atualiza histórico e gráficos quando detecta mudança
+    const INTERVALO_ATUALIZACAO_MS = 15000; // 15s (ajuste conforme necessário)
+    setInterval(() => checarAtualizacoes(usuarioId), INTERVALO_ATUALIZACAO_MS);
+    // Também atualiza quando a aba volta a ter foco
+    window.addEventListener('focus', () => checarAtualizacoes(usuarioId));
 });
 
 function carregarUltimaMedida(alunoId) {
@@ -120,6 +136,11 @@ function carregarUltimaMedida(alunoId) {
                     </div>
                 `;
                 return;
+            }
+
+            // Atualiza cache da última data conhecida (para detecção de mudanças)
+            if (medida && medida.data) {
+                ultimaDataCache = medida.data;
             }
             
             const dataFormatada = new Date(medida.data).toLocaleDateString('pt-BR');
@@ -180,6 +201,34 @@ function carregarUltimaMedida(alunoId) {
                 </div>
             `;
         });
+}
+
+// Checa periodicamente se há nova medida e atualiza as seções
+function checarAtualizacoes(alunoId) {
+    fetch(`http://localhost:8080/api/medidas/aluno/${alunoId}/ultima`)
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) return null;
+                throw new Error('Falha ao checar atualizações de medidas');
+            }
+            return response.json();
+        })
+        .then(medida => {
+            if (!medida) return; // ainda sem medidas
+            if (!ultimaDataCache) {
+                // Primeiro carregamento do cache caso ainda não esteja definido
+                ultimaDataCache = medida.data;
+                return;
+            }
+            if (medida.data && medida.data !== ultimaDataCache) {
+                console.log('Nova medida detectada. Atualizando histórico e gráficos...');
+                ultimaDataCache = medida.data;
+                carregarUltimaMedida(alunoId);
+                carregarHistoricoMedidas(alunoId);
+                carregarGraficos(alunoId);
+            }
+        })
+        .catch(err => console.warn('Aviso ao checar atualizações de medidas:', err));
 }
 
 function carregarHistoricoMedidas(alunoId) {
@@ -329,12 +378,17 @@ function carregarGraficos(alunoId) {
         })
         .then(medidas => {
             if (medidas.length === 0) {
+                // Se não houver dados, destrói gráficos existentes (se houver)
+                if (pesoChartInstance) { pesoChartInstance.destroy(); pesoChartInstance = null; }
+                if (gorduraChartInstance) { gorduraChartInstance.destroy(); gorduraChartInstance = null; }
+                if (imcChartInstance) { imcChartInstance.destroy(); imcChartInstance = null; }
+                if (medidasChartInstance) { medidasChartInstance.destroy(); medidasChartInstance = null; }
                 return;
             }
             
             // Ordenar medidas por data (mais antiga primeiro para o gráfico)
             medidas.sort((a, b) => new Date(a.data) - new Date(b.data));
-            
+
             // Preparar dados para os gráficos
             const datas = medidas.map(m => new Date(m.data).toLocaleDateString('pt-BR'));
             const pesos = medidas.map(m => m.peso);
@@ -342,7 +396,14 @@ function carregarGraficos(alunoId) {
             const imcs = medidas.map(m => m.imc);
             
             // Gráfico de Peso
-            new Chart(document.getElementById('pesoChart'), {
+            // Destrói instâncias antigas antes de recriar
+            if (pesoChartInstance) { pesoChartInstance.destroy(); }
+            if (gorduraChartInstance) { gorduraChartInstance.destroy(); }
+            if (imcChartInstance) { imcChartInstance.destroy(); }
+            if (medidasChartInstance) { medidasChartInstance.destroy(); }
+
+            // Gráfico de Peso
+            pesoChartInstance = new Chart(document.getElementById('pesoChart'), {
                 type: 'line',
                 data: {
                     labels: datas,
@@ -366,7 +427,8 @@ function carregarGraficos(alunoId) {
             });
             
             // Gráfico de % de Gordura
-            new Chart(document.getElementById('gorduraChart'), {
+            // Gráfico de % de Gordura
+            gorduraChartInstance = new Chart(document.getElementById('gorduraChart'), {
                 type: 'line',
                 data: {
                     labels: datas,
@@ -390,7 +452,8 @@ function carregarGraficos(alunoId) {
             });
             
             // Gráfico de IMC
-            new Chart(document.getElementById('imcChart'), {
+            // Gráfico de IMC
+            imcChartInstance = new Chart(document.getElementById('imcChart'), {
                 type: 'line',
                 data: {
                     labels: datas,
@@ -414,7 +477,7 @@ function carregarGraficos(alunoId) {
             });
             
             // Gráfico de Medidas
-            const medidasChart = new Chart(document.getElementById('medidasChart'), {
+            medidasChartInstance = new Chart(document.getElementById('medidasChart'), {
                 type: 'line',
                 data: {
                     labels: datas,

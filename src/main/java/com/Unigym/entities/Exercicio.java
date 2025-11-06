@@ -29,7 +29,7 @@ public class Exercicio {
     
     @ManyToOne
     @JoinColumn(name = "treino_id")
-    @JsonIgnore // Remove referência ao Treino no JSON para prevenir loop e payload poluído
+    @JsonIgnore // Remove referência ao Treino no JSON para prevenir loops infinitos, foi a melhor solução que encontrei
     private Treino treino;
     
     public Exercicio() {
