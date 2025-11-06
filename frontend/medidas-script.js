@@ -92,7 +92,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // - Verifica periodicamente se houve nova medida (compara data da última)
     // - Atualiza histórico e gráficos quando detecta mudança
     const INTERVALO_ATUALIZACAO_MS = 15000; // 15s (ajuste conforme necessário)
-    setInterval(() => checarAtualizacoes(usuarioId), INTERVALO_ATUALIZACAO_MS);
+    setInterval(() => {
+        if (document.visibilityState === 'visible') {
+            checarAtualizacoes(usuarioId);
+        }
+    }, INTERVALO_ATUALIZACAO_MS);
     // Também atualiza quando a aba volta a ter foco
     window.addEventListener('focus', () => checarAtualizacoes(usuarioId));
 });
