@@ -91,6 +91,8 @@ class AlunoDeletionIT {
     assertThat(alunoRepository.findById(alunoId)).isNotPresent();
     assertThat(medidaRepository.findByAlunoId(alunoId)).isEmpty();
     assertThat(treinoRepository.findByAluno(savedAluno)).isEmpty();
-    assertThat(exercicioRepository.findAll()).noneMatch(x -> x.getTreino() != null && alunoId.equals(x.getTreino().getAluno() != null ? x.getTreino().getAluno().getId() : null));
+    assertThat(exercicioRepository.findAll())
+        .extracting(e2 -> e2.getTreino() != null && e2.getTreino().getAluno() != null ? e2.getTreino().getAluno().getId() : null)
+        .doesNotContain(alunoId);
     }
 }

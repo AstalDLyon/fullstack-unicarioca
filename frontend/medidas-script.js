@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Atualização automática sem reload
     // - Verifica periodicamente se houve nova medida (compara data da última)
     // - Atualiza histórico e gráficos quando detecta mudança
-    const INTERVALO_ATUALIZACAO_MS = 15000; // 15s (ajuste conforme necessário)
+    const INTERVALO_ATUALIZACAO_MS = 60000; // 60s (ajuste conforme necessário, eu pessoalmente deixei 60, menos que isso é exagero)
     setInterval(() => {
         if (document.visibilityState === 'visible') {
             checarAtualizacoes(usuarioId);
@@ -224,7 +224,11 @@ function checarAtualizacoes(alunoId) {
                 ultimaDataCache = medida.data;
                 return;
             }
-            if (medida.data && medida.data !== ultimaDataCache) {
+            if (
+                medida.data &&
+                ultimaDataCache &&
+                new Date(medida.data).getTime() !== new Date(ultimaDataCache).getTime()
+            ) {
                 console.log('Nova medida detectada. Atualizando histórico e gráficos...');
                 ultimaDataCache = medida.data;
                 carregarUltimaMedida(alunoId);
@@ -232,7 +236,7 @@ function checarAtualizacoes(alunoId) {
                 carregarGraficos(alunoId);
             }
         })
-        .catch(err => console.warn('Aviso ao checar atualizações de medidas:', err));
+        .catch(err => console.warn('Falha na verificação automática de novas medidas. A próxima tentativa será em 60 segundos.', err));
 }
 
 function carregarHistoricoMedidas(alunoId) {
@@ -372,6 +376,14 @@ function carregarHistoricoMedidas(alunoId) {
         });
 }
 
+// Utilitário para destruir todos os gráficos antes de recriar
+function destroyAllCharts() {
+    if (pesoChartInstance) { pesoChartInstance.destroy(); pesoChartInstance = null; }
+    if (gorduraChartInstance) { gorduraChartInstance.destroy(); gorduraChartInstance = null; }
+    if (imcChartInstance) { imcChartInstance.destroy(); imcChartInstance = null; }
+    if (medidasChartInstance) { medidasChartInstance.destroy(); medidasChartInstance = null; }
+}
+
 function carregarGraficos(alunoId) {
     fetch(`http://localhost:8080/api/medidas/aluno/${alunoId}`)
         .then(response => {
@@ -382,14 +394,10 @@ function carregarGraficos(alunoId) {
         })
         .then(medidas => {
             if (medidas.length === 0) {
-                // Se não houver dados, destrói gráficos existentes (se houver)
-                if (pesoChartInstance) { pesoChartInstance.destroy(); pesoChartInstance = null; }
-                if (gorduraChartInstance) { gorduraChartInstance.destroy(); gorduraChartInstance = null; }
-                if (imcChartInstance) { imcChartInstance.destroy(); imcChartInstance = null; }
-                if (medidasChartInstance) { medidasChartInstance.destroy(); medidasChartInstance = null; }
+                destroyAllCharts();
                 return;
             }
-            
+
             // Ordenar medidas por data (mais antiga primeiro para o gráfico)
             medidas.sort((a, b) => new Date(a.data) - new Date(b.data));
 
@@ -398,13 +406,9 @@ function carregarGraficos(alunoId) {
             const pesos = medidas.map(m => m.peso);
             const gorduras = medidas.map(m => m.percentualGordura);
             const imcs = medidas.map(m => m.imc);
-            
-            // Gráfico de Peso
+
             // Destrói instâncias antigas antes de recriar
-            if (pesoChartInstance) { pesoChartInstance.destroy(); }
-            if (gorduraChartInstance) { gorduraChartInstance.destroy(); }
-            if (imcChartInstance) { imcChartInstance.destroy(); }
-            if (medidasChartInstance) { medidasChartInstance.destroy(); }
+            destroyAllCharts();
 
             // Gráfico de Peso
             pesoChartInstance = new Chart(document.getElementById('pesoChart'), {
@@ -429,8 +433,7 @@ function carregarGraficos(alunoId) {
                     }
                 }
             });
-            
-            // Gráfico de % de Gordura
+
             // Gráfico de % de Gordura
             gorduraChartInstance = new Chart(document.getElementById('gorduraChart'), {
                 type: 'line',
@@ -454,8 +457,7 @@ function carregarGraficos(alunoId) {
                     }
                 }
             });
-            
-            // Gráfico de IMC
+
             // Gráfico de IMC
             imcChartInstance = new Chart(document.getElementById('imcChart'), {
                 type: 'line',
@@ -479,7 +481,7 @@ function carregarGraficos(alunoId) {
                     }
                 }
             });
-            
+
             // Gráfico de Medidas
             medidasChartInstance = new Chart(document.getElementById('medidasChart'), {
                 type: 'line',
