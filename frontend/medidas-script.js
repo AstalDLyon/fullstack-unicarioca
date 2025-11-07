@@ -236,7 +236,7 @@ function checarAtualizacoes(alunoId) {
                 carregarGraficos(alunoId);
             }
         })
-        .catch(err => console.warn('Falha na verificação automática de novas medidas. A próxima tentativa será em 60 segundos.', err));
+        .catch(err => console.warn(`Falha na verificação automática de novas medidas. A próxima tentativa será em ${INTERVALO_ATUALIZACAO_MS / 1000} segundos.`, err));
 }
 
 function carregarHistoricoMedidas(alunoId) {
