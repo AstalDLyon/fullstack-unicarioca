@@ -15,12 +15,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * - @Configuration: Marca a classe como fonte de definições de beans
  * - @EnableAutoConfiguration: Configura automaticamente o Spring baseado nas dependências do classpath
  * - @ComponentScan: Escaneia os componentes dentro do pacote e subpacotes
- * 
- * Esta aplicação gerencia o sistema UniGym que inclui:
- * - Gerenciamento de alunos e instrutores
- * - Cadastro e consulta de treinos
- * - Registro e acompanhamento de medidas corporais
- * - Autenticação e autorização de usuários
  */
 @SpringBootApplication
 public class UnigymApplication {
