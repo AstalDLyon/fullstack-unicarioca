@@ -22,7 +22,7 @@ public class Instrutor {
     private String senha;
 
     public Instrutor() {
-
+        // Construtor padrão
     }
 
     // getters e setters

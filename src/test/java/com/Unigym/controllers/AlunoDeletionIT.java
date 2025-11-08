@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static java.util.Objects.requireNonNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,16 +76,16 @@ class AlunoDeletionIT {
         exercicioRepository.save(e);
 
         // Sanity pre-delete
-    final Long alunoId = savedAluno.getId();
-    final Long treinoId = savedTreino.getId();
+    final long alunoId = requireNonNull(savedAluno.getId()).longValue();
+    final long treinoId = requireNonNull(savedTreino.getId()).longValue();
     assertThat(alunoRepository.findById(alunoId)).isPresent();
     assertThat(medidaRepository.findByAlunoId(alunoId)).hasSize(1);
     assertThat(treinoRepository.findByAluno(savedAluno)).hasSize(1);
     assertThat(exercicioRepository.findAll()).anyMatch(x -> x.getTreino().getId().equals(treinoId));
 
-        // Act - delete
+        // Ação - delete
     mockMvc.perform(delete("/alunos/" + alunoId)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(requireNonNull(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isNoContent());
 
         // Assert - tudo removido

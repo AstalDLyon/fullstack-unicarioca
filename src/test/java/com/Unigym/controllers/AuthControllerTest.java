@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static java.util.Objects.requireNonNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,7 +53,7 @@ class AuthControllerTest {
         Mockito.when(alunoRepository.findByEmail("joao@uni.com")).thenReturn(aluno);
 
         mockMvc.perform(post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(requireNonNull(MediaType.APPLICATION_JSON))
                 .content("{\"email\":\"joao@uni.com\",\"senha\":\"123\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
@@ -75,7 +76,7 @@ class AuthControllerTest {
         Mockito.when(instrutorRepository.findByEmail("maria@uni.com")).thenReturn(instrutor);
 
         mockMvc.perform(post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(requireNonNull(MediaType.APPLICATION_JSON))
                 .content("{\"email\":\"maria@uni.com\",\"senha\":\"abc\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
@@ -90,7 +91,7 @@ class AuthControllerTest {
         Mockito.when(instrutorRepository.findByEmail("x@uni.com")).thenReturn(null);
 
         mockMvc.perform(post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(requireNonNull(MediaType.APPLICATION_JSON))
                 .content("{\"email\":\"x@uni.com\",\"senha\":\"zzz\"}"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.success").value(false));

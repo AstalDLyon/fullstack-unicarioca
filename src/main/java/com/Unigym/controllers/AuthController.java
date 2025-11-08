@@ -1,6 +1,7 @@
 package com.Unigym.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,11 +43,16 @@ import java.util.Map;
 @CrossOrigin(origins = "*") // Permite requisições de qualquer origem
 public class AuthController {
 
-    @Autowired
-    private AlunoRepository alunoRepository;
-    
-    @Autowired
-    private InstrutorRepository instrutorRepository;
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+    private static final String KEY_SUCCESS = "success";
+    private static final String KEY_MESSAGE = "message";
+    private final AlunoRepository alunoRepository;
+    private final InstrutorRepository instrutorRepository;
+
+    public AuthController(AlunoRepository alunoRepository, InstrutorRepository instrutorRepository) {
+        this.alunoRepository = alunoRepository;
+        this.instrutorRepository = instrutorRepository;
+    }
     
     /**
      * Realiza a autenticação do usuário no sistema
@@ -60,19 +66,24 @@ public class AuthController {
      *         ou status 401 com mensagem de erro caso contrário
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
+        if (loginRequest == null || loginRequest.getEmail() == null || loginRequest.getSenha() == null) {
+            log.warn("Requisição de login inválida: dados incompletos");
+            return ResponseEntity.badRequest().body(Map.of(KEY_SUCCESS, false, KEY_MESSAGE, "Dados de login incompletos"));
+        }
         // Login simples, obiviamente não é ideal por segurança, mas eu não manjo muito de autenticação.
         // Por simplicidade, vamos apenas verificar se o email e senha são iguais aos armazenados no banco de dados
         // Tenta autenticar como Aluno
         Aluno aluno = alunoRepository.findByEmail(loginRequest.getEmail());
         if (aluno != null && loginRequest.getSenha().equals(aluno.getSenha())) {
             Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "Login realizado com sucesso");
+            response.put(KEY_SUCCESS, true);
+            response.put(KEY_MESSAGE, "Login realizado com sucesso");
             response.put("nome", aluno.getNome());
             response.put("id", aluno.getId());
             response.put("role", "ALUNO");
             response.put("redirect", "/meus-treinos.html");
+            log.info("Login aluno bem-sucedido: id={} email={}", aluno.getId(), aluno.getEmail());
             return ResponseEntity.ok(response);
         }
 
@@ -80,18 +91,20 @@ public class AuthController {
         Instrutor instrutor = instrutorRepository.findByEmail(loginRequest.getEmail());
         if (instrutor != null && loginRequest.getSenha().equals(instrutor.getSenha())) {
             Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "Login realizado com sucesso");
+            response.put(KEY_SUCCESS, true);
+            response.put(KEY_MESSAGE, "Login realizado com sucesso");
             response.put("nome", instrutor.getNome());
             response.put("id", instrutor.getId());
             response.put("role", "INSTRUTOR");
             response.put("redirect", "/area-instrutor.html");
+            log.info("Login instrutor bem-sucedido: id={} email={}", instrutor.getId(), instrutor.getEmail());
             return ResponseEntity.ok(response);
         }
 
         Map<String, Object> response = new HashMap<>();
-        response.put("success", false);
-        response.put("message", "Credenciais inválidas");
+        response.put(KEY_SUCCESS, false);
+        response.put(KEY_MESSAGE, "Credenciais inválidas");
+        log.warn("Falha de login para email={}", loginRequest.getEmail());
         return ResponseEntity.status(401).body(response);
     }
     

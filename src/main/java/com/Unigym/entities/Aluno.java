@@ -81,7 +81,7 @@ public class Aluno {
     private List<Medida> medidas = new ArrayList<>();
 
     public Aluno() {
-
+        // Construtor padrão
     }
 
     // getters e setters

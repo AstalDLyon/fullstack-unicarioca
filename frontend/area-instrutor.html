@@ -2,20 +2,236 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=cadastrar-aluno.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Redirecionando…</title>
-  <script>
-    // Redireciona imediatamente sem manter histórico da página intermediária
-    (function(){
-      try { window.location.replace('cadastrar-aluno.html'); }
-      catch(e) { window.location.href = 'cadastrar-aluno.html'; }
-    })();
-  </script>
+  <title>Área do Instrutor</title>
+  <link rel="stylesheet" href="index-style.css" />
+  <link rel="stylesheet" href="nav-utils.css" />
+  <link rel="stylesheet" href="treinos-style.css" />
+  <link rel="stylesheet" href="area-instrutor-medidas.css" />
 </head>
 <body>
-  <noscript>
-    <p>Redirecionando para <a href="cadastrar-aluno.html">Cadastrar Aluno</a>…</p>
-  </noscript>
+  <!-- Cabeçalho no mesmo padrão do site -->
+  <header class="parallax-header">
+    <div class="parallax-logo">
+      <a href="index.html"><img src="img/logo.webp" class="logo" alt="UniGym" /></a>
+    </div>
+    <div class="parallax-links">
+      <nav>
+        <ul>
+          <li><a href="index.html#planos">Planos</a></li>
+          <li><a href="index.html#unidades">Unidades</a></li>
+          <li><a href="index.html#aulas">Aulas</a></li>
+          <li><a href="meus-treinos.html">Meus Treinos</a></li>
+          <li><a href="minhas-medidas.html">Minhas Medidas</a></li>
+          <li><a href="login.html" class="login-btn">Sair</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="content">
+    <!-- Seção: Cadastrar novo aluno -->
+    <section class="card">
+      <h2 style="color:#a01f22">Cadastrar Aluno</h2>
+      <form id="novoAlunoForm">
+        <div class="measure-inline">
+          <label>Nome
+            <input id="alunoNome" type="text" placeholder="Nome" required />
+          </label>
+          <label>E-mail
+            <input id="alunoEmail" type="email" placeholder="email@exemplo.com" required />
+          </label>
+          <label>Senha
+            <input id="alunoSenha" type="password" placeholder="Senha" required />
+          </label>
+        </div>
+  <button type="submit" class="btn btn-primary">Cadastrar</button>
+        <small id="msgAluno"></small>
+      </form>
+    </section>
+
+    <!-- Seção: Atribuir treino existente ao aluno -->
+    <section class="card">
+      <h2 style="color:#a01f22">Atribuir Treino Existente ao Aluno</h2>
+      <form id="atribuirForm">
+        <div class="measure-inline">
+          <label>Aluno
+            <select id="selAluno" required>
+              <option value="">-- Selecione --</option>
+            </select>
+          </label>
+          <label>Treino
+            <select id="selTreino" required>
+              <option value="">-- Selecione --</option>
+            </select>
+          </label>
+        </div>
+        <div class="measure-inline">
+          <button type="submit" class="btn btn-primary">Atribuir</button>
+          <button type="button" id="btnExcluirAluno" class="btn btn-danger">Excluir aluno selecionado</button>
+        </div>
+        <small id="msgAtribuir"></small>
+      </form>
+    </section>
+
+    <!-- Seção: Adicionar medidas ao aluno -->
+    <section class="card measure-box">
+      <h3 style="color:#a01f22">Adicionar Medidas do Aluno</h3>
+      <form id="medidaForm">
+        <label>Aluno
+          <select id="selAlunoMedida" required>
+            <option value="">-- Selecione --</option>
+          </select>
+        </label>
+        <label>Data
+          <input id="medData" type="date" />
+        </label>
+        <label>Peso (kg)
+          <input id="medPeso" type="number" step="0.1" min="0" placeholder="80.0" required />
+        </label>
+        <label>Altura (m)
+          <input id="medAltura" type="number" step="0.01" min="0" placeholder="1.75" required />
+        </label>
+        <label>IMC (auto)
+          <input id="medImc" type="number" step="0.01" placeholder="25.00" disabled />
+        </label>
+        <label>% Gordura (opcional)
+          <input id="medGordura" type="number" step="0.1" min="0" max="80" placeholder="20.0" />
+        </label>
+        <label>Circ. Braço (cm)
+          <input id="medBraco" type="number" step="0.1" min="0" placeholder="30.0" />
+        </label>
+        <label>Circ. Peitoral (cm)
+          <input id="medPeitoral" type="number" step="0.1" min="0" placeholder="95.0" />
+        </label>
+        <label>Circ. Cintura (cm)
+          <input id="medCintura" type="number" step="0.1" min="0" placeholder="80.0" />
+        </label>
+        <label>Circ. Quadril (cm)
+          <input id="medQuadril" type="number" step="0.1" min="0" placeholder="100.0" />
+        </label>
+        <label>Circ. Coxa (cm)
+          <input id="medCoxa" type="number" step="0.1" min="0" placeholder="55.0" />
+        </label>
+        <label>Circ. Panturrilha (cm)
+          <input id="medPanturrilha" type="number" step="0.1" min="0" placeholder="36.0" />
+        </label>
+        <label style="grid-column:1/-1">Observações
+          <input id="medObs" type="text" maxlength="255" placeholder="Anotações livres" />
+        </label>
+  <button type="submit" class="btn btn-primary">Salvar Medida</button>
+        <small id="msgMedida"></small>
+      </form>
+    </section>
+  </main>
+
+  <script src="area-instrutor-script.js"></script>
+  <script>
+    // Guard de acesso: exige role INSTRUTOR
+    (function(){
+      const role = localStorage.getItem('usuarioRole');
+      if(role !== 'INSTRUTOR') {
+        // se estiver logado como aluno redireciona para seus treinos, senão login
+        const usuarioId = localStorage.getItem('usuarioId');
+        window.location.href = usuarioId ? 'meus-treinos.html' : 'login.html';
+        return;
+      }
+    })();
+  </script>
+  <script>
+    // script mínimo para a seção de medidas, reaproveitando listas de alunos
+    (function(){
+      const selAlunoMedida = document.getElementById('selAlunoMedida');
+      const selAlunoBase = document.getElementById('selAluno');
+      const msgMedida = document.getElementById('msgMedida');
+
+      function copyAlunosOptions(){
+        selAlunoMedida.innerHTML = '<option value="">-- Selecione --</option>';
+        [...selAlunoBase.options].forEach((opt,i)=>{
+          if(i===0) return; // pular placeholder
+          const o = document.createElement('option');
+          o.value = opt.value; o.textContent = opt.textContent;
+          selAlunoMedida.appendChild(o);
+        });
+      }
+
+      // após a página carregar, aguardar a primeira carga feita por area-instrutor-script.js
+      const obs = new MutationObserver(copyAlunosOptions);
+      obs.observe(document.getElementById('selAluno'), { childList:true });
+
+      function showMsg(text, ok=false){
+        msgMedida.textContent = text;
+        msgMedida.style.display = 'block';
+        msgMedida.style.color = ok ? 'green' : 'crimson';
+      }
+
+      const pesoEl = document.getElementById('medPeso');
+      const alturaEl = document.getElementById('medAltura');
+      const imcEl = document.getElementById('medImc');
+
+      function atualizarIMC(){
+        const p = parseFloat(pesoEl.value);
+        const a = parseFloat(alturaEl.value);
+        if(Number.isFinite(p) && Number.isFinite(a) && a > 0){
+          const imc = p / (a*a);
+          imcEl.value = imc.toFixed(2);
+        } else {
+          imcEl.value = '';
+        }
+      }
+      pesoEl.addEventListener('input', atualizarIMC);
+      alturaEl.addEventListener('input', atualizarIMC);
+
+      document.getElementById('medidaForm').addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const alunoId = selAlunoMedida.value;
+        const data = document.getElementById('medData').value || new Date().toISOString().substring(0,10);
+        const peso = parseFloat(pesoEl.value);
+        const altura = parseFloat(alturaEl.value);
+        const percentualGordura = document.getElementById('medGordura').value ? parseFloat(document.getElementById('medGordura').value) : null;
+        const circunferenciaBraco = document.getElementById('medBraco').value ? parseFloat(document.getElementById('medBraco').value) : null;
+        const circunferenciaPeitoral = document.getElementById('medPeitoral').value ? parseFloat(document.getElementById('medPeitoral').value) : null;
+        const circunferenciaCintura = document.getElementById('medCintura').value ? parseFloat(document.getElementById('medCintura').value) : null;
+        const circunferenciaQuadril = document.getElementById('medQuadril').value ? parseFloat(document.getElementById('medQuadril').value) : null;
+        const circunferenciaCoxa = document.getElementById('medCoxa').value ? parseFloat(document.getElementById('medCoxa').value) : null;
+        const circunferenciaPanturrilha = document.getElementById('medPanturrilha').value ? parseFloat(document.getElementById('medPanturrilha').value) : null;
+        const observacoes = document.getElementById('medObs').value || null;
+
+        if(!alunoId || !Number.isFinite(peso) || !Number.isFinite(altura)){
+          showMsg('Preencha aluno, peso e altura');
+          return;
+        }
+
+        // calcula IMC também no front e envia
+        const imc = Number.isFinite(peso) && Number.isFinite(altura) && altura > 0 ? (peso/(altura*altura)) : null;
+
+        const body = { data, peso, altura };
+        if(percentualGordura !== null) body.percentualGordura = percentualGordura;
+        if(imc !== null) body.imc = parseFloat(imc.toFixed(2));
+        if(circunferenciaBraco !== null) body.circunferenciaBraco = circunferenciaBraco;
+        if(circunferenciaPeitoral !== null) body.circunferenciaPeitoral = circunferenciaPeitoral;
+        if(circunferenciaCintura !== null) body.circunferenciaCintura = circunferenciaCintura;
+        if(circunferenciaQuadril !== null) body.circunferenciaQuadril = circunferenciaQuadril;
+        if(circunferenciaCoxa !== null) body.circunferenciaCoxa = circunferenciaCoxa;
+        if(circunferenciaPanturrilha !== null) body.circunferenciaPanturrilha = circunferenciaPanturrilha;
+        if(observacoes) body.observacoes = observacoes;
+        body.aluno = { id: Number(alunoId) };
+
+        try {
+          const r = await fetch('http://localhost:8080/api/medidas', {
+            method:'POST',
+            headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify(body)
+          });
+          if(!r.ok) throw new Error(await r.text());
+          showMsg('Medida salva com sucesso', true);
+          e.target.reset();
+        } catch(err){
+          console.error(err);
+          showMsg('Erro ao salvar medida');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
