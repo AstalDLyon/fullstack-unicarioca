@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static java.util.Objects.requireNonNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,12 +48,11 @@ class TreinoFiltersIT {
         Treino t3 = new Treino(); t3.setNome("T3"); t3.setDataInicio(LocalDate.now().minusDays(10)); t3.setDataFim(LocalDate.now().minusDays(1)); t3.setAluno(savedAluno);
         treinoRepository.save(t1); treinoRepository.save(t2); treinoRepository.save(t3);
 
-        // /aluno/{id}
-        mockMvc.perform(get("/api/treinos/aluno/" + savedAluno.getId()).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/treinos/aluno/" + savedAluno.getId()).contentType(requireNonNull(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isOk());
 
         // /aluno/{id}/ativos
-        mockMvc.perform(get("/api/treinos/aluno/" + savedAluno.getId() + "/ativos").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/treinos/aluno/" + savedAluno.getId() + "/ativos").contentType(requireNonNull(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isOk());
 
         var todos = treinoRepository.findByAluno(savedAluno);

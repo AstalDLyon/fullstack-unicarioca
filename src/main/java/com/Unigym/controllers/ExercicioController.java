@@ -2,7 +2,8 @@ package com.Unigym.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +23,19 @@ import com.Unigym.repositories.TreinoRepository;
 @CrossOrigin(origins = "*")
 public class ExercicioController {
 
-    @Autowired
-    private ExercicioRepository exercicioRepository;
-    
-    @Autowired
-    private TreinoRepository treinoRepository;
+    private static final Logger log = LoggerFactory.getLogger(ExercicioController.class);
+    private static final String EXERCICIOS_SUFFIX = " exercícios";
+
+    private final ExercicioRepository exercicioRepository;
+    private final TreinoRepository treinoRepository;
+
+    public ExercicioController(ExercicioRepository exercicioRepository, TreinoRepository treinoRepository) {
+        this.exercicioRepository = exercicioRepository;
+        this.treinoRepository = treinoRepository;
+    }
     
     @GetMapping("/{exercicioId}")
-    public ResponseEntity<Exercicio> getExercicio(@PathVariable Long exercicioId) {
+    public ResponseEntity<Exercicio> getExercicio(@PathVariable long exercicioId) {
         return exercicioRepository.findById(exercicioId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -37,90 +43,26 @@ public class ExercicioController {
     
     @GetMapping("/treino/{treinoId}") // Endpoint lista exercícios; aceita filtros opcionais
     public ResponseEntity<List<Exercicio>> getExerciciosPorTreino(
-            @PathVariable Long treinoId,
+            @PathVariable long treinoId,
             @RequestParam(required = false) String diaSemana,
             @RequestParam(required = false) String grupoMuscular) {
-        
-        // Verifica se o treino existe
+
         if (!treinoRepository.existsById(treinoId)) {
-            System.out.println("Treino ID " + treinoId + " não encontrado");
+            log.warn("Treino ID {} não encontrado", treinoId);
             return ResponseEntity.notFound().build();
         }
-        
-    System.out.println("\n=== INÍCIO DA REQUISIÇÃO ==="); // Log abrangente para depuração
-        System.out.println("Buscando exercícios para o treino ID: " + treinoId + 
-                        " | Filtro diaSemana: '" + diaSemana + "'" + 
-                        " | Filtro grupoMuscular: '" + grupoMuscular + "'");
-        
-        List<Exercicio> exercicios;
-        
-        // Filtra por dia da semana, se fornecido
-        if (diaSemana != null && !diaSemana.isEmpty()) { // Filtro por dia
-            // Normaliza dia para formato sem acento
-            String diaSemanaFormatado = normalizarDiaSemana(diaSemana);
-            
-            System.out.println("Dia da semana recebido: '" + diaSemana + "' -> formatado para: '" + diaSemanaFormatado + "'");
-            
-            exercicios = exercicioRepository.findByTreinoIdAndDiaSemana(treinoId, diaSemanaFormatado);
-            System.out.println("Filtrado por dia da semana: '" + diaSemanaFormatado + "' | Encontrados: " + exercicios.size() + " exercícios");
-            
-            // Se não encontrou exercícios e o dia foi normalizado, tente buscar com o dia original
-            if (exercicios.isEmpty() && !diaSemanaFormatado.equals(diaSemana)) { // Tentativa fallback
-                System.out.println("Tentando busca alternativa com o dia original: '" + diaSemana + "'");
-                exercicios = exercicioRepository.findByTreinoIdAndDiaSemana(treinoId, diaSemana);
-                System.out.println("Busca alternativa: Encontrados: " + exercicios.size() + " exercícios");
-            }
-        } 
-        // Filtra por grupo muscular, se fornecido
-    else if (grupoMuscular != null && !grupoMuscular.isEmpty()) { // Filtro alternativo
-            exercicios = exercicioRepository.findByTreinoIdAndGrupoMuscular(treinoId, grupoMuscular);
-            System.out.println("Filtrado por grupo muscular: '" + grupoMuscular + "' | Encontrados: " + exercicios.size() + " exercícios");
-        } 
-        // Caso contrário, retorna todos os exercícios do treino
-        else {
-            exercicios = exercicioRepository.findByTreinoId(treinoId);
-            System.out.println("Sem filtro | Encontrados: " + exercicios.size() + " exercícios");
-            
-            // Imprimir informações detalhadas sobre cada exercício
-            System.out.println("\n=== DETALHES DOS EXERCÍCIOS PARA O TREINO ID " + treinoId + " ===");
-            for (Exercicio ex : exercicios) { // Log detalhado linha a linha
-                System.out.println("Exercício ID: " + ex.getId() + 
-                                    " | Nome: '" + ex.getNome() + "'" + 
-                                    " | Dia: '" + ex.getDiaSemana() + "'" +
-                                    " | Grupo: '" + ex.getGrupoMuscular() + "'");
-                
-                if (ex.getDiaSemana() == null || ex.getDiaSemana().isEmpty()) {
-                    System.out.println("AVISO: Exercício ID " + ex.getId() + " (" + ex.getNome() + ") não tem dia da semana definido");
-                }
-            }
-            
-            // Extrair e imprimir todos os dias da semana distintos
-            List<String> diasSemana = exercicios.stream() // Extrai dias distintos
-                .map(Exercicio::getDiaSemana)
-                .filter(dia -> dia != null && !dia.isEmpty())
-                .distinct()
-                .collect(java.util.stream.Collectors.toList());
-            
-            System.out.println("\nDias da semana encontrados neste treino: " + diasSemana);
-            
-            // Para cada dia encontrado, mostrar quantos exercícios existem
-            for (String dia : diasSemana) {
-                long count = exercicios.stream()
-                    .filter(ex -> dia.equals(ex.getDiaSemana()))
-                    .count();
-                System.out.println("- Dia '" + dia + "': " + count + " exercícios");
-            }
-        }
-        
-        System.out.println("=== FIM DA REQUISIÇÃO ===\n");
+
+        log.info("Início requisição exercícios treino={} diaSemana='{}' grupoMuscular='{}'", treinoId, diaSemana, grupoMuscular);
+        List<Exercicio> exercicios = resolveFiltroExercicios(treinoId, diaSemana, grupoMuscular);
+        log.info("Total retornado: {}{}", exercicios.size(), EXERCICIOS_SUFFIX);
+        detalharDiasSemana(treinoId, exercicios, diaSemana, grupoMuscular);
         return ResponseEntity.ok(exercicios);
     }
     
     @PostMapping("/treino/{treinoId}")
     public ResponseEntity<Exercicio> adicionarExercicio(
-            @PathVariable Long treinoId, 
+            @PathVariable long treinoId, 
             @RequestBody Exercicio exercicio) {
-        
         return treinoRepository.findById(treinoId)
                 .map(treino -> {
                     exercicio.setTreino(treino);
@@ -135,50 +77,66 @@ public class ExercicioController {
      * @param dia Dia da semana a ser normalizado
      * @return Dia da semana normalizado
      */
-    private String normalizarDiaSemana(String dia) { // Centraliza regras de equivalência de dias
-        if (dia == null || dia.trim().isEmpty()) {
-            System.out.println("AVISO: Dia da semana nulo ou vazio recebido na normalização");
+    // --- Métodos auxiliares extraídos ---
+    private List<Exercicio> resolveFiltroExercicios(long treinoId, String diaSemana, String grupoMuscular) {
+        if (diaSemana != null && !diaSemana.isBlank()) {
+            String normalizado = normalizarDiaSemana(diaSemana);
+            log.debug("Dia recebido='{}' normalizado='{}'", diaSemana, normalizado);
+            List<Exercicio> list = exercicioRepository.findByTreinoIdAndDiaSemana(treinoId, normalizado);
+            if (list.isEmpty() && !normalizado.equals(diaSemana)) { // fallback original
+                List<Exercicio> fallback = exercicioRepository.findByTreinoIdAndDiaSemana(treinoId, diaSemana);
+                if (!fallback.isEmpty()) {
+                    log.info("Fallback diaSemana original retornou {}{}", fallback.size(), EXERCICIOS_SUFFIX);
+                    return fallback;
+                }
+            }
+            return list;
+        }
+        if (grupoMuscular != null && !grupoMuscular.isBlank()) {
+            return exercicioRepository.findByTreinoIdAndGrupoMuscular(treinoId, grupoMuscular);
+        }
+        return exercicioRepository.findByTreinoId(treinoId);
+    }
+
+    private void detalharDiasSemana(long treinoId, List<Exercicio> exercicios, String diaSemana, String grupoMuscular) {
+        if (diaSemana != null || grupoMuscular != null) {
+            return; // Detalhes apenas sem filtros
+        }
+        log.debug("Detalhando exercícios treino {}", treinoId);
+        exercicios.forEach(ex -> {
+            if (ex.getDiaSemana() == null || ex.getDiaSemana().isBlank()) {
+                log.warn("Exercício {} ({}) sem diaSemana definido", ex.getId(), ex.getNome());
+            }
+        });
+        var diasDistintos = exercicios.stream()
+                .map(Exercicio::getDiaSemana)
+                .filter(d -> d != null && !d.isBlank())
+                .distinct()
+                .toList();
+        diasDistintos.forEach(d -> {
+            long count = exercicios.stream().filter(ex -> d.equals(ex.getDiaSemana())).count();
+            log.info("Dia '{}' possui {}{}", d, count, EXERCICIOS_SUFFIX);
+        });
+    }
+
+    private String normalizarDiaSemana(String dia) {
+        if (dia == null || dia.isBlank()) {
+            log.warn("Dia da semana nulo ou vazio recebido");
             return "";
         }
-        
-        // Padronizar para maiúsculas e remover espaços extras
-        String diaUpper = dia.trim().toUpperCase();
-        
-        // Mapeamento de dias com acentos para sem acentos
-        // Note que no import.sql, os dias são sempre sem acentos: SEGUNDA, TERCA, QUARTA, etc.
-        switch (diaUpper) {
-            case "SEGUNDA": 
-            case "SEGUNDA-FEIRA": 
-                return "SEGUNDA";
-                
-            case "TERÇA": 
-            case "TERÇA-FEIRA":
-            case "TERCA": 
-            case "TERCA-FEIRA": 
-                return "TERCA";
-                
-            case "QUARTA": 
-            case "QUARTA-FEIRA": 
-                return "QUARTA";
-                
-            case "QUINTA": 
-            case "QUINTA-FEIRA": 
-                return "QUINTA";
-                
-            case "SEXTA": 
-            case "SEXTA-FEIRA": 
-                return "SEXTA";
-                
-            case "SÁBADO":
-            case "SABADO": 
-                return "SABADO";
-                
-            case "DOMINGO": 
-                return "DOMINGO";
-                
-            default:
-                System.out.println("AVISO: Dia da semana não reconhecido: '" + diaUpper + "'");
-                return diaUpper; // Se não reconhecer, retorna o valor original em maiúsculas
-        }
+        String upper = dia.trim().toUpperCase();
+        return switch (upper) {
+            case "SEGUNDA", "SEGUNDA-FEIRA" -> "SEGUNDA";
+            case "TERÇA", "TERÇA-FEIRA", "TERCA", "TERCA-FEIRA" -> "TERCA";
+            case "QUARTA", "QUARTA-FEIRA" -> "QUARTA";
+            case "QUINTA", "QUINTA-FEIRA" -> "QUINTA";
+            case "SEXTA", "SEXTA-FEIRA" -> "SEXTA";
+            case "SÁBADO", "SABADO" -> "SABADO";
+            case "DOMINGO" -> "DOMINGO";
+            default -> {
+                log.warn("Dia da semana não reconhecido: '{}'", upper);
+                yield upper;
+            }
+        };
     }
 }

@@ -21,17 +21,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar se o usuário está logado
     const usuarioId = localStorage.getItem('usuarioId');
     const usuarioNome = localStorage.getItem('usuarioNome');
+    const usuarioRole = localStorage.getItem('usuarioRole');
     
     if (usuarioId && usuarioNome) {
         // Usuário está logado - modificar o menu
         const nav = document.querySelector('nav ul');
         
-        // Remover o botão de login
-        const loginBtn = document.querySelector('.login-btn');
-        if (loginBtn) {
-            loginBtn.parentElement.remove();
-        }
+        // Remover todos os botões de login existentes (Aluno/Instrutor)
+        document.querySelectorAll('.login-btn').forEach(btn => {
+            const li = btn.closest('li');
+            if (li) li.remove();
+            else btn.remove();
+        });
         
+        // Adicionar opções conforme o papel do usuário
+        if (usuarioRole === 'INSTRUTOR') {
+            const liInstrutor = document.createElement('li');
+            liInstrutor.innerHTML = '<a href="area-instrutor.html" class="user-menu-item">Área do Instrutor</a>';
+            nav.appendChild(liInstrutor);
+        }
+
         // Adicionar área do aluno logado com opções
         const userElement = document.createElement('li');
         userElement.className = 'user-info';
@@ -49,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('logout-btn').addEventListener('click', function() {
             localStorage.removeItem('usuarioId');
             localStorage.removeItem('usuarioNome');
+            localStorage.removeItem('usuarioRole');
             window.location.reload();
         });
     }

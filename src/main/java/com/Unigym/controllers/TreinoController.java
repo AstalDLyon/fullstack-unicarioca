@@ -1,10 +1,11 @@
-package com.Unigym.controllers;
+package com.Unigym.controllers; 
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +26,15 @@ import com.Unigym.repositories.TreinoRepository;
 @CrossOrigin(origins = "*")
 public class TreinoController {
 
-    @Autowired
-    private TreinoRepository treinoRepository;
-    
-    @Autowired
-    private AlunoRepository alunoRepository;
+    private static final Logger log = LoggerFactory.getLogger(TreinoController.class);
+
+    private final TreinoRepository treinoRepository;
+    private final AlunoRepository alunoRepository;
+
+    public TreinoController(TreinoRepository treinoRepository, AlunoRepository alunoRepository) {
+        this.treinoRepository = treinoRepository;
+        this.alunoRepository = alunoRepository;
+    }
 
     // Lista todos os treinos existentes (para seleção na área do instrutor)
     @GetMapping
@@ -39,61 +44,62 @@ public class TreinoController {
     }
     
     @GetMapping("/{treinoId}")
-    public ResponseEntity<Treino> getTreino(@PathVariable Long treinoId) {
+    public ResponseEntity<Treino> getTreino(@PathVariable long treinoId) {
         return treinoRepository.findById(treinoId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
     
     @GetMapping("/aluno/{alunoId}")
-    public ResponseEntity<List<Treino>> getTreinosDoAluno(@PathVariable Long alunoId) {
+    public ResponseEntity<List<Treino>> getTreinosDoAluno(@PathVariable long alunoId) {
         try {
-            System.out.println("Buscando todos os treinos para o aluno ID: " + alunoId);
+            log.info("Buscando todos os treinos para o aluno ID: {}", alunoId);
             
             Aluno aluno = alunoRepository.findById(alunoId).orElse(null);
             if (aluno == null) {
-                System.out.println("Aluno não encontrado com ID: " + alunoId);
+                log.warn("Aluno não encontrado com ID: {}", alunoId);
                 return ResponseEntity.notFound().build();
             }
             
             List<Treino> treinos = treinoRepository.findByAluno(aluno);
-            System.out.println("Total de treinos encontrados: " + treinos.size());
+            log.info("Total de treinos encontrados: {}", treinos.size());
             
             return ResponseEntity.ok(treinos);
         } catch (Exception e) {
-            System.err.println("Erro ao buscar todos os treinos: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Erro ao buscar todos os treinos", e);
             return ResponseEntity.status(500).build();
         }
     }
     
     @GetMapping("/aluno/{alunoId}/ativos")
-    public ResponseEntity<List<Treino>> getTreinosAtivosDoAluno(@PathVariable Long alunoId) {
+    public ResponseEntity<List<Treino>> getTreinosAtivosDoAluno(@PathVariable long alunoId) {
         try {
-            System.out.println("Buscando treinos ativos para o aluno ID: " + alunoId);
+            log.info("Buscando treinos ativos para o aluno ID: {}", alunoId);
             
             Aluno aluno = alunoRepository.findById(alunoId).orElse(null);
             if (aluno == null) {
-                System.out.println("Aluno não encontrado com ID: " + alunoId);
+                log.warn("Aluno não encontrado com ID: {}", alunoId);
                 return ResponseEntity.notFound().build();
             }
             
             LocalDate hoje = LocalDate.now();
-            System.out.println("Data atual: " + hoje);
+            log.debug("Data atual: {}", hoje);
             
             List<Treino> treinos = treinoRepository.findByAlunoIdAndDataFimIsNullOrAlunoIdAndDataFimGreaterThanEqual(alunoId, alunoId, hoje);
-            System.out.println("Treinos encontrados: " + treinos.size());
+            log.info("Treinos encontrados: {}", treinos.size());
             
             return ResponseEntity.ok(treinos);
         } catch (Exception e) {
-            System.err.println("Erro ao buscar treinos ativos: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Erro ao buscar treinos ativos", e);
             return ResponseEntity.status(500).build();
         }
     }
     
     @PostMapping
     public ResponseEntity<Treino> criarTreino(@RequestBody Treino treino) {
+        if (treino == null) {
+            return ResponseEntity.badRequest().build();
+        }
         Treino novoTreino = treinoRepository.save(treino);
         return ResponseEntity.ok(novoTreino);
     }
@@ -101,7 +107,7 @@ public class TreinoController {
     // Atribui (clona) um treino existente para um aluno específico
     // Cria um novo Treino copiando os dados do original e replicando os exercícios
     @PostMapping("/{treinoId}/atribuir/{alunoId}")
-    public ResponseEntity<Treino> atribuirTreinoParaAluno(@PathVariable Long treinoId, @PathVariable Long alunoId) {
+    public ResponseEntity<Treino> atribuirTreinoParaAluno(@PathVariable long treinoId, @PathVariable long alunoId) {
         try {
             var treinoOriginalOpt = treinoRepository.findById(treinoId);
             if (treinoOriginalOpt.isEmpty()) {
@@ -147,7 +153,7 @@ public class TreinoController {
             Treino salvo = treinoRepository.save(novo); // Cascade.ALL persiste os exercícios
             return ResponseEntity.ok(salvo);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("Erro ao atribuir treino {} para aluno {}", treinoId, alunoId, ex);
             return ResponseEntity.status(500).build();
         }
     }

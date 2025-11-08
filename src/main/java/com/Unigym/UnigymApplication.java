@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * UnigymApplication
  * 
- * Classe principal da aplicação Spring Boot que inicializa todo o sistema UniGym.
  * Esta classe contém o método main que inicia o servidor web embutido e carrega
  * o contexto da aplicação Spring, incluindo todos os componentes, controladores,
  * serviços e repositórios necessários para o funcionamento do sistema.

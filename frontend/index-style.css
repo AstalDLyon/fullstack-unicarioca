@@ -99,11 +99,19 @@ nav a:hover {
   text-decoration: none;
   font-weight: bold;
   border-radius: 5px;
+  border: none;
+  cursor: pointer;
 }
 
 .btn:hover {
   background-color: #d92f44;
 }
+
+/* variantes para uso geral */
+.btn-primary { background-color:#a01f22; color:#fff; }
+.btn-primary:hover { background-color:#d92f44; }
+.btn-danger { background-color:#c62828; color:#fff; }
+.btn-danger:hover { background-color:#ad2323; }
 
 /* Seção Planos */
 

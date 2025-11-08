@@ -2,7 +2,8 @@ package com.Unigym.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,14 +43,19 @@ import com.Unigym.repositories.TreinoRepository;
 @RequestMapping(value = "/alunos") // se eu acessar o localhost:8080/alunos estarei acessando aqui
 public class AlunoController {
 
-    @Autowired
-    private AlunoRepository repository;
-    
-    @Autowired
-    private MedidaRepository medidaRepository;
+    private static final Logger log = LoggerFactory.getLogger(AlunoController.class);
 
-    @Autowired
-    private TreinoRepository treinoRepository;
+    private final AlunoRepository repository;
+    private final MedidaRepository medidaRepository;
+    private final TreinoRepository treinoRepository;
+
+    public AlunoController(AlunoRepository repository,
+                           MedidaRepository medidaRepository,
+                           TreinoRepository treinoRepository) {
+        this.repository = repository;
+        this.medidaRepository = medidaRepository;
+        this.treinoRepository = treinoRepository;
+    }
 
     /**
      * Retorna a lista de todos os alunos cadastrados no sistema
@@ -74,9 +80,8 @@ public class AlunoController {
      * @return O aluno correspondente ao ID ou null se não encontrado
      */
     @GetMapping(value = "/{id}")
-    public Aluno getAlunoById(@PathVariable Long id) {
-        Aluno result = repository.findById(id).orElse(null);
-        return result;
+    public Aluno getAlunoById(@PathVariable long id) {
+        return repository.findById(id).orElse(null);
     }
     
     /**
@@ -91,8 +96,12 @@ public class AlunoController {
      */
     @PostMapping
     public Aluno insert(@RequestBody Aluno aluno) {
-        Aluno result = repository.save(aluno);
-        return result;
+        // Null safety: Spring guarantees @RequestBody not null when JSON is provided; defensively log otherwise
+        if (aluno == null) {
+            log.warn("Tentativa de salvar aluno nulo");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Aluno inválido");
+        }
+        return repository.save(aluno);
     }
     
     /**
@@ -103,19 +112,28 @@ public class AlunoController {
      */
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable long id) {
         // Garante que o aluno exista
-        Aluno aluno = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado"));
+        var alunoOpt = repository.findById(id);
+        if (alunoOpt.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado");
+        }
+        Aluno aluno = alunoOpt.get();
 
-        // Remove medidas do aluno
-        medidaRepository.deleteAll(medidaRepository.findByAlunoId(id));
-        
+        // Remove medidas do aluno (garantindo lista não nula)
+        var medidas = medidaRepository.findByAlunoId(id);
+        if (medidas != null && !medidas.isEmpty()) {
+            medidaRepository.deleteAll(medidas);
+        }
+
         // Remove treinos do aluno (Exercicios serão removidos por cascade no Treino)
-        treinoRepository.deleteAll(treinoRepository.findByAluno(aluno));
-        
-        // Por fim, remove o aluno
-        repository.delete(aluno);
+        var treinos = treinoRepository.findByAluno(aluno);
+        if (treinos != null && !treinos.isEmpty()) {
+            treinoRepository.deleteAll(treinos);
+        }
+
+    // Por fim, remove o aluno
+    repository.deleteById(id);
     }
     
 }

@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static java.util.Objects.requireNonNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,11 +59,11 @@ class TreinoAssignmentIT {
         e1.setNome("Supino"); e1.setGrupoMuscular("PEITO"); e1.setSeries(3); e1.setRepeticoes(10); e1.setDiaSemana("SEGUNDA"); e1.setTreino(savedBase);
         Exercicio e2 = new Exercicio();
         e2.setNome("Agachamento"); e2.setGrupoMuscular("PERNAS"); e2.setSeries(4); e2.setRepeticoes(8); e2.setDiaSemana("QUARTA"); e2.setTreino(savedBase);
-        exercicioRepository.saveAll(List.of(e1, e2));
+        exercicioRepository.saveAll(requireNonNull(List.of(e1, e2)));
 
         // Act: atribui
         mockMvc.perform(post("/api/treinos/" + savedBase.getId() + "/atribuir/" + savedAluno.getId())
-                .contentType(MediaType.APPLICATION_JSON))
+        .contentType(requireNonNull(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isOk());
 
         // Assert: novo treino do aluno, diferente do base
@@ -72,7 +73,8 @@ class TreinoAssignmentIT {
         assertThat(clonado.getId()).isNotEqualTo(savedBase.getId());
         assertThat(clonado.getAluno().getId()).isEqualTo(savedAluno.getId());
         var exerciciosClonados = exercicioRepository.findByTreinoId(clonado.getId());
-        assertThat(exerciciosClonados).hasSize(2);
-        assertThat(exerciciosClonados).allMatch(x -> x.getTreino().getId().equals(clonado.getId()));
+        assertThat(exerciciosClonados)
+            .hasSize(2)
+            .allMatch(x -> x.getTreino().getId().equals(clonado.getId()));
     }
 }
