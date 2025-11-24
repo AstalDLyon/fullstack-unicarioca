@@ -35,6 +35,16 @@ public class MedidaController {
         this.alunoRepository = alunoRepository;
     }
     
+    // Lista geral de medidas (GET /api/medidas)
+    @GetMapping
+    public ResponseEntity<List<Medida>> listarTodas() {
+        List<Medida> todas = medidaRepository.findAll();
+        if (todas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(todas);
+    }
+    
     @GetMapping("/{medidaId}")
     public ResponseEntity<Medida> getMedida(@PathVariable long medidaId) {
         return medidaRepository.findById(medidaId)
