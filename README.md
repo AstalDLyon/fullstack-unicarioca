@@ -15,7 +15,7 @@ Para executar o projeto UniGym, você precisará ter os seguintes componentes in
 ### Instruções para Execução
 
 1. Clone o repositório:
-   ```
+   ```bash
    git clone https://github.com/AstalDLyon/fullstack-unicarioca.git
    cd fullstack-unicarioca
    ```

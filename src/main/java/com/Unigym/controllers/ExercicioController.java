@@ -34,6 +34,16 @@ public class ExercicioController {
         this.treinoRepository = treinoRepository;
     }
     
+    // Lista geral de exercícios (GET /api/exercicios)
+    @GetMapping
+    public ResponseEntity<List<Exercicio>> listarTodos() {
+        List<Exercicio> todos = exercicioRepository.findAll();
+        if (todos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(todos);
+    }
+    
     @GetMapping("/{exercicioId}")
     public ResponseEntity<Exercicio> getExercicio(@PathVariable long exercicioId) {
         return exercicioRepository.findById(exercicioId)
