@@ -7,10 +7,21 @@
 Para executar o projeto UniGym, você precisará ter os seguintes componentes instalados:
 
 - **Java 21** - O projeto utiliza Java 21, já que foi iniciado antes do lançamento do LTS 25, porém não afeta em nada, já que a versão 25 é mais focada em concorrencia pelo que eu li
-- **Maven 3.8+** - Para gerenciamento de dependências e build do projeto.
+- **Maven 3.8+** - Já possui um wrapper (mvnw), então não precissa instalar, já vai ser configurado automaticamente.
+- **LiveServer** - Uma extensão do vs code que facilita a visualização do frontend.
 - **Banco de dados H2** - Incluído como dependência (não requer instalação separada).
 - **Navegador web moderno** - Chrome, Firefox, Edge ou Safari para acessar a interface.
 - **Portas disponíveis** - A aplicação utiliza por padrão a porta 8080.
+
+### Resumo da Stack
+
+- **Spring Boot 3.5.8** (starters: Web, Data JPA, H2, Actuator, Test)
+- **Persistência**: Spring Data JPA sobre H2 (modo arquivo) para desenvolvimento rápido.
+- **Logging**: SLF4J (via starters) com substituição de `System.out` nos controllers.
+- **Testes**: JUnit + Spring Boot Test (`spring-boot-starter-test`).
+- **Frontend**: HTML/CSS/JS puro (sem framework) com `localStorage` para sessão e papel do usuário.
+- **Arquitetura**: Controllers REST finos, repositórios derivados, entidades simples; futuras melhorias podem incluir validação (Bean Validation) e segurança (Spring Security).(Será melhorado após o prazo de avaliação, já que implementação de segurança e autenticação mais confiavel demora e pelo menos na minha opinião deve ser feito com cuidado by Astal)
+
 
 ### Instruções para Execução
 
@@ -37,6 +48,8 @@ Para executar o projeto UniGym, você precisará ter os seguintes componentes in
    - JDBC URL: jdbc:h2:file:./unigym-db
    - Usuário: sa
    - Senha: (deixe em branco)
+
+5. É possivel visualizar pelo LiveServer a aplicação inteira, desde que a classe main esteja ativa. abra o arquivo "index.html" no live server, e a partir deste ponto, poderá usar como um site normal.
 
 ### Pasta frontend
  Possui os seguintes arquivos:
@@ -107,7 +120,7 @@ Desenvolvida em Java com Spring Boot, utilizando Spring Web, Spring Data JPA, H2
 - [x] Funcionalidade de logout
 
 #### Cadastro e Gerenciamento
-- [ ] Cadastro de alunos, instrutores, treinos e medidas
+- [x] Cadastro de alunos, instrutores, treinos e medidas
 - [x] Persistência em banco de dados H2
 - [x] Relacionamentos entre entidades (aluno-treino, treino-exercício, etc.)
 

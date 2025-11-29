@@ -50,8 +50,8 @@ public class AlunoController {
     private final TreinoRepository treinoRepository;
 
     public AlunoController(AlunoRepository repository,
-                           MedidaRepository medidaRepository,
-                           TreinoRepository treinoRepository) {
+                            MedidaRepository medidaRepository,
+                            TreinoRepository treinoRepository) {
         this.repository = repository;
         this.medidaRepository = medidaRepository;
         this.treinoRepository = treinoRepository;
