@@ -7,7 +7,7 @@
 Para executar o projeto UniGym, você precisará ter os seguintes componentes instalados:
 
 - **Java 21** - O projeto utiliza Java 21, já que foi iniciado antes do lançamento do LTS 25, porém não afeta em nada, já que a versão 25 é mais focada em concorrencia pelo que eu li
-- **Maven 3.8+** - Já possui um wrapper (mvnw), então não precissa instalar, já vai ser configurado automaticamente.
+- **Maven 3.8+** - Já possui um wrapper (mvnw), então não precisa instalar, já vai ser configurado automaticamente.
 - **LiveServer** - Uma extensão do vs code que facilita a visualização do frontend.
 - **Banco de dados H2** - Incluído como dependência (não requer instalação separada).
 - **Navegador web moderno** - Chrome, Firefox, Edge ou Safari para acessar a interface.
